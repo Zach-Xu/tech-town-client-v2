@@ -5,7 +5,7 @@ import Sidebar from '../components/Sidebar'
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   const { pathname } = router
-  console.log(pathname)
+
   if (pathname === '/') {
     return <Component {...pageProps} />
   }
@@ -19,15 +19,15 @@ export default MyApp
 
 const Layout: React.FC<{ children: any }> = (props) => {
   return (
-    <div className='w-screen min-h-screen ' >
+    <div className='w-screen h-screen overflow-y-scroll scrollbar-hide' >
       <Header />
-      <section className='flex'>
+      <section className='flex h-[cal(100vh-50px)] '>
         <Sidebar />
-        <div className='py-3 px-8 md:py-5 md:px-10'>
+        <main className='flex-1'>
           {
             props.children
           }
-        </div>
+        </main>
       </section>
     </div >
   )
