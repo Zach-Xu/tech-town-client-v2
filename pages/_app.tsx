@@ -19,7 +19,7 @@ export default MyApp
 
 const Layout: React.FC<{ children: any }> = (props) => {
   return (
-    <div className='w-screen h-screen overflow-y-scroll scrollbar-hide' >
+    <div className='w-screen h-screen overflow-y-scroll' >
       <Header />
       <section className='flex h-[cal(100vh-50px)] '>
         <Sidebar />
