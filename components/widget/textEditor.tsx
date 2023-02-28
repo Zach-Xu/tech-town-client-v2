@@ -47,7 +47,8 @@ const TextEditor = ({ content, setContent }: Props) => {
           minHeight: '200px',
           border: isFocus ? '1px solid rgb(205, 223, 237)' : '1px solid lightgray',
           padding: '0px 10px',
-          boxShadow: isFocus ? '0 0 0 4px rgb(205, 223, 237, 0.4)' : ''
+          boxShadow: isFocus ? '0 0 0 4px rgb(205, 223, 237, 0.4)' : '',
+          backgroundColor: 'white'
         }}
         onFocus={() => setIsFocus(true)}
         onEditorStateChange={editorState => setEditorState(editorState)}

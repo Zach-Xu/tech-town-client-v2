@@ -12,7 +12,7 @@ const Question = ({ question }: Props) => {
         <div className='relative grid grid-cols-5 border border-gray-300 m-5 rounded-lg px-5 py-6 shadow-lg gap-x-10'>
             <div className='col-span-1'>{`${question.answers.length} answers`}</div>
             <div className='col-span-4 flex flex-col'>
-                <Link href={`question/${question._id}`} className='text-blue-400 cursor-pointer'>{question.title}</Link>
+                <Link href={`questions/${question._id}`} className='text-blue-400 cursor-pointer'>{question.title}</Link>
 
                 <ul className='flex space-x-3 list-none mt-1'>
                     <li><Tag tagName={question.category.substring(0, 7)} /></li>
