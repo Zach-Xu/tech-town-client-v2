@@ -23,7 +23,7 @@ const QuestionDetail: NextPage = (props: Props, router) => {
 
     console.log(question)
     return (
-        <div className='max-w-[700px] p-4  md:py-5 md:px-10'>
+        <div className='max-w-[700px] p-4  md:py-5 md:px-10 bg-white md:ml-5 md:my-2 md:rounded-lg border-l border-gray-200 md:shadow-sm'>
             {
                 question &&
                 <Fragment>
@@ -51,16 +51,30 @@ const QuestionDetail: NextPage = (props: Props, router) => {
                                 <div className='flex justify-end space-x-10 mt-2'>
                                     <div className='bg-blue-100 p-2'>
                                         <p className='text-[0.7rem] text-gray-500'>Asked 15 mins ago</p>
-                                        <div className='flex items-center space-x-2'>
+                                        <div className='flex items-center space-x-2 mt-1 md:mt-2'>
                                             <Image src='/default-user-image.png' className='cursor-pointer' width={36} height={36} alt='user profile picture' />
                                             <span className='text-blue-500 hover:text-blue-400 text-sm cursor-pointer'>{question.user.username}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-                        <p className='text-lg pt-4'>Your Answer</p>
+                        {/* Answers */}
+                        <div className='text-lg pt-4 font-semibold'>{2} Answers</div>
+                        <div>
+                            <p >Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <div className='flex justify-end space-x-10 mt-2'>
+                                <div className='p-2'>
+                                    <p className='text-[0.7rem] text-gray-500'>Answered 15 mins ago</p>
+                                    <div className='flex items-center space-x-2 mt-1 md:mt-2'>
+                                        <Image src='/default-user-image.png' className='cursor-pointer' width={36} height={36} alt='user profile picture' />
+                                        <span className='text-blue-500 hover:text-blue-400 text-sm cursor-pointer'>{question.user.username}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                        <p className='text-lg pt-4  font-semibold'>Your Answer</p>
                         <TextEditor content={answer} setContent={setAnswer} />
                         <button className='text-white text-xs bg-blue-500 py-2 px-3 rounded-md cursor-pointer'>Post Your Answer</button>
                     </section>
