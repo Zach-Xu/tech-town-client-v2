@@ -19,9 +19,9 @@ export default MyApp
 
 const Layout: React.FC<{ children: any }> = (props) => {
   return (
-    <div className='w-screen h-screen overflow-y-scroll bg-gradient-to-r from-white to-blue-200' >
+    <div className='w-screen h-screen overflow-y-scroll flex flex-col bg-gradient-to-r from-white to-blue-200' >
       <Header />
-      <section className='flex h-[cal(100vh-50px)] '>
+      <section className='flex flex-1 '>
         <Sidebar />
         <main className='flex-1'>
           {

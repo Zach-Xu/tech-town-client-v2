@@ -23,7 +23,7 @@ const QuestionDetail: NextPage = (props: Props, router) => {
 
     console.log(question)
     return (
-        <div className='max-w-[700px] p-4  md:py-5 md:px-10 bg-white md:ml-5 md:my-2 md:rounded-lg border-l border-gray-200 md:shadow-sm'>
+        <div className='max-w-[700px] p-4  md:py-5 md:px-10 bg-white md:ml-5 md:my-2 md:rounded-lg border-l border-gray-200  md:shadow-sm'>
             {
                 question &&
                 <Fragment>
