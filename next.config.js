@@ -5,7 +5,7 @@ const nextConfig = (phase) => {
 
   if (phase === PHASE_DEVELOPMENT_SERVER) {
     return {
-      reactStrictMode: true,
+      reactStrictMode: false,
       env: {
         API_BASE_URL: 'http://localhost:5000'
       }

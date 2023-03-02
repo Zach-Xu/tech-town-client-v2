@@ -34,7 +34,7 @@ const Home: NextPage = () => {
                     {
                         data && data.map(question => (
 
-                            <Question question={question} />
+                            <Question key={question._id} question={question} />
 
                         ))
 
