@@ -37,7 +37,7 @@ export const protectedFetcher = <T>({ url, method, data }: FetchConfig): Promise
         method,
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': token
+            'Authorization': `Bearer ${token}`
         },
         body
     }).then(res => res.json())

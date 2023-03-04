@@ -6,7 +6,7 @@ export interface Response<T> {
     msg: string
 }
 
-interface User extends SignupUser {
+export interface User extends SignupUser {
     id: number
 }
 

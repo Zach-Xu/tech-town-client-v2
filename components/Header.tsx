@@ -1,10 +1,15 @@
 import React from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
+import { useSelector } from 'react-redux'
+import { AppState } from '../redux/reducers'
 
 type Props = {}
 
 const Header = (props: Props) => {
+
+    const currentUser = useSelector((state: AppState) => state.user)
+
     return (
         <div className='sticky top-0 h-[50px] bg-white border-b border-gray-300 py-2 flex items-center z-10'>
             <div className='w-screen flex items-center mx-auto max-w-[960px] px-3 space-x-5'>
@@ -14,7 +19,7 @@ const Header = (props: Props) => {
                     <input type="text" name="" placeholder='Search Question' className='bg-transparent focus:outline-none w-full text-gray-700' />
                 </div>
                 <ul className='flex space-x-2'>
-                    <li>Welcome, Zach</li>
+                    <li>Welcome, {currentUser?.username}</li>
                     <li className='hidden md:inline-block'>Logout</li>
                 </ul>
             </div>

@@ -3,11 +3,18 @@ import { REQUEST_METHOD, TECH_TOWN_TOKEN } from '../lib/constants'
 import { FetchConfig, SignupUser } from '../types/requestTypes'
 import useSWRMutation from 'swr/mutation'
 import { authFetcher } from '../lib/helper'
-import { SignupDTO } from '../types/responseTypes'
+import { SignupDTO, Response } from '../types/responseTypes'
+import { useRouter } from 'next/router'
+import { useDispatch } from 'react-redux'
+import { updateUser } from '../redux/reducers'
 
 type Props = {}
 
 const Signup = (props: Props) => {
+
+    const router = useRouter()
+
+    const dispatch = useDispatch()
 
     const [user, setUser] = useState<SignupUser>({
         email: '',
@@ -21,14 +28,20 @@ const Signup = (props: Props) => {
         url: '/api/auth/register',
     }
 
-    const { trigger, data } = useSWRMutation(params, authFetcher<SignupDTO>)
+    const { trigger, data } = useSWRMutation(params, authFetcher<Response<SignupDTO>>, {
+        onSuccess(data, key, config) {
+            if (data.code == 201) {
+                localStorage.setItem(TECH_TOWN_TOKEN, data.data!.token)
+                dispatch(updateUser(data.data!.user))
+                return router.push('/home')
+            }
+
+        },
+    })
 
     const signupHandler = (e: React.FormEvent) => {
         e.preventDefault()
         trigger()
-    }
-    if (data) {
-        localStorage.setItem(TECH_TOWN_TOKEN, data.token)
     }
 
     return (

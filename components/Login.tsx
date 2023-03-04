@@ -1,12 +1,18 @@
 import React, { useState } from 'react'
-import { REQUEST_METHOD } from '../lib/constants'
+import { REQUEST_METHOD, TECH_TOWN_TOKEN } from '../lib/constants'
 import useSWRMutation from 'swr/mutation'
 import { authFetcher } from '../lib/helper'
 import { FetchConfig, LoginUser } from '../types/requestTypes'
+import { useRouter } from 'next/router'
+import { SignupDTO, Response } from '../types/responseTypes'
+import { useDispatch } from 'react-redux'
+import { updateUser } from '../redux/reducers'
 
 type Props = {}
 
 const Login = (props: Props) => {
+
+    const dispatch = useDispatch()
 
     const [user, setUser] = useState<LoginUser>({
         email: '',
@@ -18,14 +24,25 @@ const Login = (props: Props) => {
         method: REQUEST_METHOD.POST,
         data: user
     }
-    const { trigger, data } = useSWRMutation(params, authFetcher)
+
+    const router = useRouter()
+
+    const { trigger, data } = useSWRMutation(params, authFetcher<Response<SignupDTO>>, {
+        onSuccess(data, key, config) {
+            if (data.code === 401) {
+                return console.log(data)
+            }
+            if (data.code == 200) {
+                localStorage.setItem(TECH_TOWN_TOKEN, data.data!.token)
+                router.push('/home')
+                return dispatch(updateUser(data.data!.user))
+            }
+        },
+    })
 
     const LoginHandler = async (e: React.FormEvent) => {
         e.preventDefault()
         trigger()
-    }
-    if (data) {
-        console.log('from login api', data)
     }
 
     return (

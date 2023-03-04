@@ -3,10 +3,36 @@ import type { AppProps } from 'next/app'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import { SWRConfig } from 'swr'
-import { fetcher } from '../lib/helper'
+import { fetcher, protectedFetcher } from '../lib/helper'
+import { Provider } from 'react-redux'
+import store from '../redux/store'
+import { useDispatch } from 'react-redux'
+import { updateUser } from '../redux/reducers'
+import useSWR from 'swr'
+import { User, Response } from '../types/responseTypes'
+
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   const { pathname } = router
+
+  const dispatch = useDispatch()
+
+  useSWR({ url: '/api/auth/refresh' }, protectedFetcher<Response<User>>, {
+    onSuccess(data, key, config) {
+      // redirect to login page if authentication fails
+      if (data.code === 401) {
+        return router.push('/')
+      }
+
+      // update global user info on page refresh
+      if (data.code === 200) {
+        console.log('refresh user info', data)
+        return dispatch(updateUser(data.data!))
+      }
+
+    }
+  })
+
 
   if (pathname === '/') {
     return <Component {...pageProps} />
@@ -18,13 +44,15 @@ function MyApp({ Component, pageProps, router }: AppProps) {
 
 export default function App(props: AppProps) {
   return (
-    <SWRConfig
-      value={{
-        fetcher
-      }}
-    >
-      <MyApp {...props} />
-    </SWRConfig>
+    <Provider store={store}>
+      <SWRConfig
+        value={{
+          fetcher
+        }}
+      >
+        <MyApp {...props} />
+      </SWRConfig>
+    </Provider>
   )
 }
 
