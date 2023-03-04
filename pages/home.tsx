@@ -9,7 +9,7 @@ import { Question as QuestionType } from '../types/propsType'
 
 const Home: NextPage = () => {
 
-    const { data, error, isLoading } = useSWR(`${process.env.API_BASE_URL}/api/posts`, fetcher<QuestionType[]>)
+    const { data, error, isLoading } = useSWR(['/api/posts', 123], fetcher<QuestionType[]>)
     if (error) {
         console.log(error)
     }

@@ -2,6 +2,8 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
+import { SWRConfig } from 'swr'
+import { fetcher } from '../lib/helper'
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   const { pathname } = router
@@ -14,7 +16,17 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   )
 }
 
-export default MyApp
+export default function App(props: AppProps) {
+  return (
+    <SWRConfig
+      value={{
+        fetcher
+      }}
+    >
+      <MyApp {...props} />
+    </SWRConfig>
+  )
+}
 
 
 const Layout: React.FC<{ children: any }> = (props) => {
