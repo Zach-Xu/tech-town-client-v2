@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { REQUEST_METHOD, TECH_TOWN_TOKEN } from '../lib/constants'
 import useSWRMutation from 'swr/mutation'
-import { authFetcher } from '../lib/helper'
+import { authFetcher } from '../lib/fetcher'
 import { FetchConfig, LoginUser } from '../types/requestTypes'
 import { useRouter } from 'next/router'
 import { SignupDTO, Response } from '../types/responseTypes'
 import { useDispatch } from 'react-redux'
 import { updateUser } from '../redux/reducers'
+import { toast } from "react-toastify";
 
 type Props = {}
 
@@ -27,18 +28,24 @@ const Login = (props: Props) => {
 
     const router = useRouter()
 
-    const { trigger, data } = useSWRMutation(params, authFetcher<Response<SignupDTO>>, {
+    const { trigger, data, error } = useSWRMutation(params, authFetcher<Response<SignupDTO>>, {
         onSuccess(data, key, config) {
-            if (data.code === 401) {
-                return console.log(data)
+            if (data.code === 401 || data.code === 400) {
+                toast.error(data.msg)
             }
             if (data.code == 200) {
                 localStorage.setItem(TECH_TOWN_TOKEN, data.data!.token)
+                toast.success(data.msg)
                 router.push('/home')
                 return dispatch(updateUser(data.data!.user))
             }
         },
+        onError(err, key, config) {
+            console.log(err)
+            toast.error(err)
+        },
     })
+
 
     const LoginHandler = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -48,10 +55,10 @@ const Login = (props: Props) => {
     return (
         <div className='w-[90vw] md:w-[500px]  px-10 bg-white rounded-xl py-10 mx-auto lg:mr-10 flex flex-col items-center shadow-lg'>
             <form className='flex flex-col w-full items-center space-y-3' onSubmit={LoginHandler}>
-                <input type="email" name="email"
+                <input type="email" name="email" required
                     onChange={e => setUser({ ...user, [e.target.name]: e.target.value })}
                     placeholder='Email' className='w-full border border-gray-400 px-2 py-3 rounded-md' />
-                <input type="password" name='password'
+                <input type="password" name='password' required
                     onChange={e => setUser({ ...user, [e.target.name]: e.target.value })}
                     placeholder="Password" className='w-full border border-gray-400 px-2 py-3 rounded-md' />
                 <input className='bg-[#1877f2] cursor-pointer hover:bg-[#1668d2] w-full py-2 text-white font-bold text-xl rounded-md' type="submit" value="Log In" />

@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { REQUEST_METHOD, TECH_TOWN_TOKEN } from '../lib/constants'
 import { FetchConfig, SignupUser } from '../types/requestTypes'
 import useSWRMutation from 'swr/mutation'
-import { authFetcher } from '../lib/helper'
+import { authFetcher } from '../lib/fetcher'
 import { SignupDTO, Response } from '../types/responseTypes'
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
 import { updateUser } from '../redux/reducers'
+import { toast } from 'react-toastify'
 
 type Props = {}
 
@@ -28,14 +29,17 @@ const Signup = (props: Props) => {
         url: '/api/auth/register',
     }
 
-    const { trigger, data } = useSWRMutation(params, authFetcher<Response<SignupDTO>>, {
+    const { trigger, data, error } = useSWRMutation(params, authFetcher<Response<SignupDTO>>, {
         onSuccess(data, key, config) {
             if (data.code == 201) {
                 localStorage.setItem(TECH_TOWN_TOKEN, data.data!.token)
+                toast.success(data.msg)
                 dispatch(updateUser(data.data!.user))
                 return router.push('/home')
             }
-
+            if (data.code == 401 || data.code == 400) {
+                toast.error(data.msg)
+            }
         },
     })
 
@@ -54,9 +58,9 @@ const Signup = (props: Props) => {
                         <h2 className='text-black font-bold text-2xl'>Sign Up</h2>
                         <p>Its quick and easy.</p>
                         <div className='border-t border-gray-400 w-full'></div>
-                        <input type="text" name="username" onChange={e => setUser({ ...user, [e.target.name]: e.target.value })} placeholder='Username' className='w-full border border-gray-400 px-2 py-3 rounded-md' />
-                        <input type="text" name="email" onChange={e => setUser({ ...user, [e.target.name]: e.target.value })} placeholder='Email' className='w-full border border-gray-400 px-2 py-3 rounded-md' />
-                        <input type="password" name="password" onChange={e => setUser({ ...user, [e.target.name]: e.target.value })} placeholder="Password" className='w-full border border-gray-400 px-2 py-3 rounded-md' />
+                        <input type="text" name="username" required onChange={e => setUser({ ...user, [e.target.name]: e.target.value })} placeholder='Username' className='w-full border border-gray-400 px-2 py-3 rounded-md' />
+                        <input type="text" name="email" required onChange={e => setUser({ ...user, [e.target.name]: e.target.value })} placeholder='Email' className='w-full border border-gray-400 px-2 py-3 rounded-md' />
+                        <input type="password" name="password" required onChange={e => setUser({ ...user, [e.target.name]: e.target.value })} placeholder="Password" className='w-full border border-gray-400 px-2 py-3 rounded-md' />
                         <input type='submit' className='cursor-pointer bg-[#42b72a] px-16 py-2 text-md font-bold rounded-md text-white mx-auto' value='Sign Up'></input>
                     </form>
                 </div>

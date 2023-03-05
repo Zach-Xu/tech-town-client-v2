@@ -3,7 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 import useSWR from 'swr'
 import Question from '../components/Question'
-import { fetcher } from '../lib/helper'
+import { fetcher } from '../lib/fetcher'
 import { Question as QuestionType } from '../types/propsType'
 
 

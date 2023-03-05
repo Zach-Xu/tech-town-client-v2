@@ -5,7 +5,8 @@ export interface FetchConfig {
     method: REQUEST_METHOD
     data: {
         [key: string]: any
-    }
+    },
+    token?: string
 }
 
 export interface LoginUser {

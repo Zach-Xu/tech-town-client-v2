@@ -14,3 +14,9 @@ export interface SignupDTO {
     token: string
     user: User
 }
+
+
+export interface ResponseError extends Error {
+    info?: string
+    status?: number
+}
