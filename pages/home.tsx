@@ -4,12 +4,12 @@ import React from 'react'
 import useSWR from 'swr'
 import Question from '../components/Question'
 import { fetcher } from '../lib/fetcher'
-import { Question as QuestionType } from '../types/propsType'
-
+import { QuestionVO } from '../types/vo/questionVO'
+import { ResponseResult } from '../types/vo/response'
 
 const Home: NextPage = () => {
 
-    const { data, error, isLoading } = useSWR(['/api/posts', 123], fetcher<QuestionType[]>)
+    const { data, error, isLoading } = useSWR('/api/questions', fetcher<ResponseResult<QuestionVO[]>>)
     if (error) {
         console.log(error)
     }
@@ -32,9 +32,9 @@ const Home: NextPage = () => {
                         isLoading && `loading....`
                     }
                     {
-                        data && data.map(question => (
+                        data && data.data?.map(question => (
 
-                            <Question key={question._id} question={question} />
+                            <Question key={question.id} question={question} />
 
                         ))
 

@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
 import { REQUEST_METHOD, TECH_TOWN_TOKEN } from '../lib/constants'
-import { FetchConfig, SignupUser } from '../types/requestTypes'
 import useSWRMutation from 'swr/mutation'
 import { authFetcher } from '../lib/fetcher'
-import { SignupDTO, Response } from '../types/responseTypes'
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
 import { updateUser } from '../redux/reducers'
 import { toast } from 'react-toastify'
+import { SignupDTO } from '../types/dto/authDTO'
+import { FetchConfig } from '../types/dto/fetchConfig'
+import { ResponseResult } from '../types/vo/response'
+import { TokenUser } from '../types/vo/userVO'
+
+
 
 type Props = {}
 
@@ -17,7 +21,7 @@ const Signup = (props: Props) => {
 
     const dispatch = useDispatch()
 
-    const [user, setUser] = useState<SignupUser>({
+    const [user, setUser] = useState<SignupDTO>({
         email: '',
         password: '',
         username: ''
@@ -29,7 +33,7 @@ const Signup = (props: Props) => {
         url: '/api/auth/register',
     }
 
-    const { trigger, data, error } = useSWRMutation(params, authFetcher<Response<SignupDTO>>, {
+    const { trigger, data, error } = useSWRMutation(params, authFetcher<ResponseResult<TokenUser>>, {
         onSuccess(data, key, config) {
             if (data.code == 201) {
                 localStorage.setItem(TECH_TOWN_TOKEN, data.data!.token)

@@ -3,17 +3,17 @@ import { useRouter } from 'next/router'
 import React, { Fragment, useState } from 'react'
 import useSWR from 'swr'
 import { fetcher } from '../../lib/fetcher'
-import { Question } from '../../types/propsType'
 import { ChevronUpIcon, ChevronDownIcon, BookmarkIcon } from '@heroicons/react/24/outline'
 import Tag from '../../components/widget/Tag'
 import Image from 'next/image'
 import TextEditor from '../../components/widget/textEditor'
+import { QuestionDetailVO } from '../../types/vo/questionDetailVO'
 
 type Props = {}
 
 const QuestionDetail: NextPage = (props: Props, router) => {
     const { query } = useRouter()
-    const { data: question, error, isLoading } = useSWR(`${process.env.API_BASE_URL}/api/posts/post/${query.id}`, fetcher<Question>)
+    const { data: question, error, isLoading } = useSWR(`${process.env.API_BASE_URL}/api/posts/post/${query.id}`, fetcher<QuestionDetailVO>)
 
     const [answer, setAnswer] = useState<string>('')
 
@@ -30,8 +30,8 @@ const QuestionDetail: NextPage = (props: Props, router) => {
                     <header className='flex flex-col space-y-3 '>
                         <h2 className='text-2xl font-bold'> {question.title}</h2>
                         <div className='flex  space-x-4 md:space-x-10 text-xs'>
-                            <p className='text-gray-500'>Asked <span className='text-black'>{new Date(question.createdDate).toLocaleDateString()}</span></p>
-                            <p className='text-gray-500'>Viewed <span className='text-black'>{14}</span> times</p>
+                            <p className='text-gray-500'>Asked <span className='text-black'>{new Date(question.createdTime).toLocaleDateString()}</span></p>
+                            <p className='text-gray-500'>Viewed <span className='text-black'>{question.views}</span> times</p>
                         </div>
                     </header>
                     <hr className='my-2 md:my-4' />
@@ -39,14 +39,18 @@ const QuestionDetail: NextPage = (props: Props, router) => {
                         <div className='flex space-x-4 lg:space-x-6 pt-4'>
                             <div className='flex flex-col items-center'>
                                 <ChevronUpIcon className='w-6 h-6 md:w-10 md:h-10 text-gray-300 cursor-pointer' />
-                                <span className='text-lg md:text-xl text-gray-500'>0</span>
+                                <span className='text-lg md:text-xl text-gray-500'>{question.upVotes - question.downVotes}</span>
                                 <ChevronDownIcon className='w-6 h-6 md:w-10 md:h-10 text-gray-300 cursor-pointer' />
                                 <BookmarkIcon className='w-3 h-3 md:w-7 md:h-7 text-gray-300 cursor-pointer' />
                             </div>
                             <div className='flex-1'>
                                 <div dangerouslySetInnerHTML={{ __html: question.content }}></div>
                                 <div className='flex mt-5 space-x-5'>
-                                    <Tag tagName={question.category.substring(0, 7)} />
+                                    {
+                                        question.tags.map(tag => (
+                                            <li key={tag.id}><Tag tagName={tag.tagName} /></li>
+                                        ))
+                                    }
                                 </div>
                                 <div className='flex justify-end space-x-10 mt-2'>
                                     <div className='bg-blue-100 p-2'>

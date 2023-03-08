@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import { REQUEST_METHOD, TECH_TOWN_TOKEN } from '../lib/constants'
 import useSWRMutation from 'swr/mutation'
 import { authFetcher } from '../lib/fetcher'
-import { FetchConfig, LoginUser } from '../types/requestTypes'
 import { useRouter } from 'next/router'
-import { SignupDTO, Response } from '../types/responseTypes'
 import { useDispatch } from 'react-redux'
 import { updateUser } from '../redux/reducers'
 import { toast } from "react-toastify";
+import { LoginDTO } from '../types/dto/authDTO'
+import { FetchConfig } from '../types/dto/fetchConfig'
+import { ResponseResult } from '../types/vo/response'
+import { TokenUser } from '../types/vo/userVO'
 
 type Props = {}
 
@@ -15,7 +17,7 @@ const Login = (props: Props) => {
 
     const dispatch = useDispatch()
 
-    const [user, setUser] = useState<LoginUser>({
+    const [user, setUser] = useState<LoginDTO>({
         email: '',
         password: ''
     })
@@ -28,7 +30,7 @@ const Login = (props: Props) => {
 
     const router = useRouter()
 
-    const { trigger, data, error } = useSWRMutation(params, authFetcher<Response<SignupDTO>>, {
+    const { trigger, data, error } = useSWRMutation(params, authFetcher<ResponseResult<TokenUser>>, {
         onSuccess(data, key, config) {
             if (data.code === 401 || data.code === 400) {
                 toast.error(data.msg)

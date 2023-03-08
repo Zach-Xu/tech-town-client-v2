@@ -3,10 +3,20 @@ import React, { useState } from 'react'
 import { useRef } from 'react'
 import TextEditor from '../../components/widget/textEditor'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import useSWRMutation from 'swr/mutation'
+import { FetchConfig, Question, Tag } from '../../types/requestTypes'
+import { REQUEST_METHOD } from '../../lib/constants'
+import { authFetcher, protectedFetcher } from '../../lib/fetcher'
+import { toast } from 'react-toastify'
+import { Response } from '../../types/responseTypes'
 
 type Props = {}
 
+
+
 const Ask: NextPage = (props: Props) => {
+
+    const [title, setTitle] = useState<string>('')
 
     const [content, setContent] = useState<string>('')
 
@@ -15,8 +25,6 @@ const Ask: NextPage = (props: Props) => {
     const [tags, setTags] = useState<string[]>([])
 
     const tagInputRef = useRef<HTMLInputElement>(null)
-
-    console.log('tags', tags)
 
     const handleTags = (e: React.KeyboardEvent) => {
         if (!tagInputRef.current) return
@@ -66,6 +74,28 @@ const Ask: NextPage = (props: Props) => {
         setTags(tags.filter(t => t !== tag))
     }
 
+    const postQuestionParams: FetchConfig = {
+        data: {
+            tags: tags.map((tag): Tag => ({ tagName: tag, description: null })),
+            content,
+            title
+        },
+        method: REQUEST_METHOD.POST,
+        url: '/api/questions',
+    }
+
+    const { trigger, data, error } = useSWRMutation(postQuestionParams, protectedFetcher<Response<Question>>, {
+        onSuccess(data, key, config) {
+            if (data.code == 201) {
+                toast.success(data.msg)
+                return
+            }
+            if (data.code == 401 || data.code == 400) {
+                toast.error(data.msg)
+            }
+        },
+    })
+
 
     return (
         <div className='mx-5' >
@@ -92,7 +122,7 @@ const Ask: NextPage = (props: Props) => {
                         <div className='flex flex-col bg-white py-5 px-10 space-y-2 rounded-md shadow-md'>
                             <h5 className='text-sm font-semibold'>Title</h5>
                             <p className='text-xs text-gray-600'>Be specific and imagine you're asking a question to another person.</p>
-                            <input type="text" name="" className='border border-gray-400 rounded-sm text-xs p-2 focus:outline-none focus:shadow-inner focus:shadow-[rgb(205,223,237)]' placeholder='e.g. Is there a method in C# for coverting object to JSON?' />
+                            <input type="text" name="title" value={title} onChange={e => setTitle(e.target.value)} className='border border-gray-400 rounded-sm text-xs p-2 focus:outline-none focus:shadow-inner focus:shadow-[rgb(205,223,237)]' placeholder='e.g. Is there a method in C# for coverting object to JSON?' />
                         </div>
                         {/* Step 2 detail */}
                         <div className='flex flex-col bg-white  py-5 px-10 space-y-2 rounded-md shadow-md'>
@@ -119,6 +149,8 @@ const Ask: NextPage = (props: Props) => {
                                 <input type="text" name="" ref={tagInputRef} onBlur={inputBlurHandler} onKeyDown={handleTags} className='mb-2 md:mb-0 border border-gray-400 md:border-0 outline-none flex-grow shrink text-xs md:text-sm p-2 focus:outline-none ' placeholder='e.g. (typescript database react)' />
                             </div>
                         </div>
+                        <button className='bg-blue-400 hover:bg-blue-300 py-1 px-3 text-white rounded-md mt-5'
+                            onClick={() => trigger()}>Post question</button>
                     </div>
                 }
 
