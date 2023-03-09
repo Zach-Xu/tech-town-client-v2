@@ -8,20 +8,25 @@ import Tag from '../../components/widget/Tag'
 import Image from 'next/image'
 import TextEditor from '../../components/widget/textEditor'
 import { QuestionDetailVO } from '../../types/vo/questionDetailVO'
+import { ResponseResult } from '../../types/vo/response'
 
 type Props = {}
 
 const QuestionDetail: NextPage = (props: Props, router) => {
     const { query } = useRouter()
-    const { data: question, error, isLoading } = useSWR(`${process.env.API_BASE_URL}/api/posts/post/${query.id}`, fetcher<QuestionDetailVO>)
+    const { data, error, isLoading } = useSWR(`/api/questions/${query.id}`, fetcher<ResponseResult<QuestionDetailVO>>)
 
     const [answer, setAnswer] = useState<string>('')
+    let question
 
     if (isLoading)
         return <h1>Loading...</h1>
+    if (data) {
+        question = data.data
+        console.log('question', question)
+    }
 
 
-    console.log(question)
     return (
         <div className='max-w-[700px] p-4  md:py-5 md:px-10 bg-white md:ml-5 md:my-2 md:rounded-lg border-l border-gray-200  md:shadow-sm'>
             {
@@ -45,13 +50,13 @@ const QuestionDetail: NextPage = (props: Props, router) => {
                             </div>
                             <div className='flex-1'>
                                 <div dangerouslySetInnerHTML={{ __html: question.content }}></div>
-                                <div className='flex mt-5 space-x-5'>
+                                <ul className='flex mt-5 space-x-5 list-none'>
                                     {
                                         question.tags.map(tag => (
                                             <li key={tag.id}><Tag tagName={tag.tagName} /></li>
                                         ))
                                     }
-                                </div>
+                                </ul>
                                 <div className='flex justify-end space-x-10 mt-2'>
                                     <div className='bg-blue-100 p-2'>
                                         <p className='text-[0.7rem] text-gray-500'>Asked 15 mins ago</p>

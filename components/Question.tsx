@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
+import { getTimeSince } from '../lib/helper'
 import { QuestionVO } from '../types/vo/questionVO'
 import Tag from './widget/Tag'
 
@@ -23,7 +24,7 @@ const Question = ({ question }: Props) => {
                 </ul>
 
             </div>
-            <div className='absolute right-2 bottom-1 text-sm'>{`${question.user.username} asked 1min ago`}</div>
+            <div className='absolute right-2 bottom-1 text-sm'>{`${question.user.username} asked ${getTimeSince(new Date(question.createdTime))}`}</div>
         </div>
     )
 }
