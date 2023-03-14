@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../types/responseTypes";
+import { UserVO } from "../types/vo/userVO";
 
 export interface AppState {
-    user: User | undefined
+    user: UserVO | undefined
 }
 
 const initialState: AppState = {
@@ -13,7 +13,7 @@ const appSlice = createSlice({
     name: 'tech_town',
     initialState,
     reducers: {
-        updateUser: (state, action: PayloadAction<User>) => ({
+        updateUser: (state, action: PayloadAction<UserVO>) => ({
             ...state,
             user: action.payload
         })

@@ -3,12 +3,25 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { useSelector } from 'react-redux'
 import { AppState } from '../redux/reducers'
+import { TECH_TOWN_TOKEN } from '../lib/constants'
+import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
 
 type Props = {}
 
 const Header = (props: Props) => {
 
     const currentUser = useSelector((state: AppState) => state.user)
+
+    const router = useRouter()
+
+    const logout = () => {
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem(TECH_TOWN_TOKEN)
+            router.push('/')
+            toast.success('log out successfully')
+        }
+    }
 
     return (
         <div className='sticky top-0 h-[50px] bg-white border-b border-gray-300 py-2 flex items-center z-10'>
@@ -20,7 +33,7 @@ const Header = (props: Props) => {
                 </div>
                 <ul className='flex space-x-2'>
                     <li>Welcome, {currentUser?.username}</li>
-                    <li className='hidden md:inline-block'>Logout</li>
+                    <li className='hidden md:inline-block cursor-pointer' onClick={logout}>Logout</li>
                 </ul>
             </div>
 

@@ -1,13 +1,20 @@
+import { VOTE_STATUS } from "../../lib/constants"
+
 export interface QuestionDTO {
-    id: number
     title: string
     content: string
-    tags: Tag[]
+    tags: TagDTO[]
 }
 
-export interface Tag {
-    id: number
+export interface VoteDTO {
+    status: VOTE_STATUS
+}
+
+export interface TagDTO {
     tagName: string
     description: string | null
 }
 
+export interface AnswerDTO {
+    content: string
+}

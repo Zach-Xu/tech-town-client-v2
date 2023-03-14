@@ -1,12 +1,17 @@
-import { Tag } from "../dto/questionDTO"
-
-interface Answer {
-    content: string
-    user: User
+export interface Tag {
     id: number
+    tagName: string
+    description: string | null
 }
 
-interface User {
+export interface AnswerVO {
+    content: string
+    user: UserVO
+    id: number
+    createdTime: string
+}
+
+interface UserVO {
     username: string
     email: string
     id: number
@@ -17,11 +22,11 @@ export interface QuestionDetailVO {
     tags: Tag[]
     content: string
     title: string
-    user: User
-    answers: Answer[]
+    user: UserVO
+    answers: AnswerVO[]
     upVotes: number
     downVotes: number
     views: number
-    createdTime: Date
+    createdTime: string
 }
 

@@ -1,4 +1,5 @@
-export const getTimeSince = (createdTime: Date): string => {
+export const getTimeSince = (createdTimeString: string): string => {
+    let createdTime = new Date(createdTimeString)
     const createTimeInMils = createdTime.getTime()
     if (createdTime === null) {
         return ''
@@ -45,7 +46,7 @@ export const getTimeSince = (createdTime: Date): string => {
         if (minute === 1) {
             return '1 min ago'
         }
-        return minute + 'mins ago'
+        return minute + ' mins ago'
     } else if (second > 0) {
         if (second === 1) {
             return '1 sec ago'

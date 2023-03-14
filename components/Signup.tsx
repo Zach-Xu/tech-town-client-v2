@@ -27,13 +27,13 @@ const Signup = (props: Props) => {
         username: ''
     })
 
-    const params: FetchConfig = {
+    const params: FetchConfig<SignupDTO> = {
         data: user,
         method: REQUEST_METHOD.POST,
         url: '/api/auth/register',
     }
 
-    const { trigger, data, error } = useSWRMutation(params, authFetcher<ResponseResult<TokenUser>>, {
+    const { trigger, data, error } = useSWRMutation(params, authFetcher<ResponseResult<TokenUser>, SignupDTO>, {
         onSuccess(data, key, config) {
             if (data.code == 201) {
                 localStorage.setItem(TECH_TOWN_TOKEN, data.data!.token)

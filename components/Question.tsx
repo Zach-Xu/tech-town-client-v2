@@ -10,8 +10,14 @@ type Props = {
 
 const Question = ({ question }: Props) => {
     return (
-        <div className='relative grid grid-cols-5 border bg-white border-gray-300 m-5 rounded-lg px-5 py-6 shadow-lg gap-x-10'>
-            <div className='col-span-1'>{`${question.numOfAnswers} answers`}</div>
+        <div className='relative md:grid md:grid-cols-5 border bg-white border-gray-300 m-5 rounded-lg px-5 py-6 shadow-lg gap-x-10'>
+            <div className='md:col-span-1'>
+                <div className='flex md:flex-col space-x-5 flex-row md:space-x-0'>
+                    <p> {`${question.votes} votes`} </p>
+                    <p> {`${question.numOfAnswers} answers`} </p>
+                    <p> {`${question.views} views`} </p>
+                </div>
+            </div>
             <div className='col-span-4 flex flex-col'>
                 <Link href={`questions/${question.id}`} className='text-blue-400 cursor-pointer'>{question.title}</Link>
 
@@ -24,7 +30,7 @@ const Question = ({ question }: Props) => {
                 </ul>
 
             </div>
-            <div className='absolute right-2 bottom-1 text-sm'>{`${question.user.username} asked ${getTimeSince(new Date(question.createdTime))}`}</div>
+            <div className='absolute right-2 bottom-1 text-sm'><span className='cursor-pointer text-blue-500 hover:text-blue-300'>{question.user.username}</span>{` asked ${getTimeSince(question.createdTime)}`}</div>
         </div>
     )
 }

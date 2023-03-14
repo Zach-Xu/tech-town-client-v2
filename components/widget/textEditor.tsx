@@ -36,7 +36,7 @@ const TextEditor = ({ content, setContent }: Props) => {
   }, [content]);
 
   return (
-    <div>
+    <div className='hover:cursor-text'>
       <Editor
         editorState={editorState}
         toolbarClassName="toolbarClassName"

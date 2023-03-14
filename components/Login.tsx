@@ -22,7 +22,7 @@ const Login = (props: Props) => {
         password: ''
     })
 
-    const params: FetchConfig = {
+    const params: FetchConfig<LoginDTO> = {
         url: '/api/auth/login',
         method: REQUEST_METHOD.POST,
         data: user
@@ -30,10 +30,10 @@ const Login = (props: Props) => {
 
     const router = useRouter()
 
-    const { trigger, data, error } = useSWRMutation(params, authFetcher<ResponseResult<TokenUser>>, {
+    const { trigger, data, error } = useSWRMutation(params, authFetcher<ResponseResult<TokenUser>, LoginDTO>, {
         onSuccess(data, key, config) {
             if (data.code === 401 || data.code === 400) {
-                toast.error(data.msg)
+                return toast.error(data.msg)
             }
             if (data.code == 200) {
                 localStorage.setItem(TECH_TOWN_TOKEN, data.data!.token)

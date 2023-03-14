@@ -4,15 +4,16 @@ import { useRef } from 'react'
 import TextEditor from '../../components/widget/textEditor'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import useSWRMutation from 'swr/mutation'
-import { FetchConfig, Question, Tag } from '../../types/requestTypes'
 import { REQUEST_METHOD } from '../../lib/constants'
-import { authFetcher, protectedFetcher } from '../../lib/fetcher'
+import { protectedFetcher } from '../../lib/fetcher'
 import { toast } from 'react-toastify'
-import { Response } from '../../types/responseTypes'
+import { ResponseResult } from '../../types/vo/response'
+import { QuestionDTO, TagDTO } from '../../types/dto/questionDTO'
+import { FetchConfig } from '../../types/dto/fetchConfig'
+import { QuestionVO } from '../../types/vo/questionVO'
+
 
 type Props = {}
-
-
 
 const Ask: NextPage = (props: Props) => {
 
@@ -74,9 +75,9 @@ const Ask: NextPage = (props: Props) => {
         setTags(tags.filter(t => t !== tag))
     }
 
-    const postQuestionParams: FetchConfig = {
+    const postQuestionParams: FetchConfig<QuestionDTO> = {
         data: {
-            tags: tags.map((tag): Tag => ({ tagName: tag, description: null })),
+            tags: tags.map((tag): TagDTO => ({ tagName: tag, description: null })),
             content,
             title
         },
@@ -84,7 +85,7 @@ const Ask: NextPage = (props: Props) => {
         url: '/api/questions',
     }
 
-    const { trigger, data, error } = useSWRMutation(postQuestionParams, protectedFetcher<Response<Question>>, {
+    const { trigger, data, error } = useSWRMutation(postQuestionParams, protectedFetcher<ResponseResult<QuestionVO>, QuestionDTO>, {
         onSuccess(data, key, config) {
             if (data.code == 201) {
                 toast.success(data.msg)
