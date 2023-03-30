@@ -6,6 +6,11 @@ export enum REQUEST_METHOD {
     DELETE = 'DELETE'
 }
 
+export enum TYPE {
+    REGULAR = 'REGULAR',
+    BOT = 'BOT'
+}
+
 export enum VOTE_STATUS {
     CANCEL = 0,
     UP_VOTE = 1,

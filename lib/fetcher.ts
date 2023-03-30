@@ -49,3 +49,25 @@ export const protectedFetcher = async <T, S>({ url, method, data }: FetchConfig<
     return response.data
 }
 
+
+
+// Fetcher for any protected API that requires a token
+/**
+ * @typeparam  T - type of data received from the server
+ * @typeparam  S - type of data sent to the server
+ */
+export const protectedFetcherWithExtraParams = async <T, S>(url: string, { arg }: { arg: FetchConfig<S> }): Promise<T> => {
+
+    let token: string = localStorage.getItem(TECH_TOWN_TOKEN) ?? ''
+
+    const response = await axios.request({
+        method: arg.method,
+        url,
+        data: arg.data,
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    return response.data
+}
+

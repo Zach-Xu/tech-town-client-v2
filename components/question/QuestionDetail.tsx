@@ -56,7 +56,6 @@ const QuestionDetail = ({ question }: Props) => {
 
     useEffect(() => {
         voteQuestion()
-        console.log('12312321312321')
     }, [voteStatus])
 
     if (voteVo) {
@@ -65,7 +64,7 @@ const QuestionDetail = ({ question }: Props) => {
 
     const upVoteClickHandler = () => {
 
-        if (voteStatus == VOTE_STATUS.UP_VOTE) {
+        if (voteStatus === VOTE_STATUS.UP_VOTE) {
             // already up voted
             setVoteStatus(VOTE_STATUS.CANCEL)
         } else {
@@ -74,7 +73,7 @@ const QuestionDetail = ({ question }: Props) => {
     }
 
     const downVoteClickHandler = () => {
-        if (voteStatus == VOTE_STATUS.DOWN_VOTE) {
+        if (voteStatus === VOTE_STATUS.DOWN_VOTE) {
             // already down voted
             setVoteStatus(VOTE_STATUS.CANCEL)
         } else {
@@ -85,13 +84,13 @@ const QuestionDetail = ({ question }: Props) => {
     return (
         <div className='flex space-x-4 lg:space-x-6 pt-4'>
             <div className='flex flex-col items-center'>
-                <ChevronUpIcon className='w-6 h-6 md:w-10 md:h-10 text-gray-300 cursor-pointer' onClick={upVoteClickHandler} />
+                <ChevronUpIcon className={`w-6 h-6 md:w-10 md:h-10 ${voteStatus === VOTE_STATUS.UP_VOTE ? 'text-blue-400' : ' text-gray-300'} cursor-pointer`} onClick={upVoteClickHandler} />
                 <span className='text-lg md:text-xl text-gray-500'>{voteVo?.data?.id ? voteVo.data.question.upVotes - voteVo.data.question.downVotes : question.upVotes - question.downVotes}</span>
-                <ChevronDownIcon className='w-6 h-6 md:w-10 md:h-10 text-gray-300 cursor-pointer' onClick={downVoteClickHandler} />
+                <ChevronDownIcon className={`w-6 h-6 md:w-10 md:h-10 ${voteStatus === VOTE_STATUS.DOWN_VOTE ? 'text-blue-400' : ' text-gray-300'} cursor-pointer`} onClick={downVoteClickHandler} />
                 <BookmarkIcon className='w-3 h-3 md:w-7 md:h-7 text-gray-300 cursor-pointer' />
             </div>
-            <div className='flex-1'>
-                <div dangerouslySetInnerHTML={{ __html: question.content }}></div>
+            <div className='flex-1 flex flex-col'>
+                <div dangerouslySetInnerHTML={{ __html: question.content }} className='flex-1 flex-wrap'></div>
                 <ul className='flex mt-5 space-x-5 list-none'>
                     {
                         question.tags.map(tag => (

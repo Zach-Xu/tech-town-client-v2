@@ -9,10 +9,11 @@ import store from '../redux/store'
 import { useDispatch } from 'react-redux'
 import { updateUser } from '../redux/reducers'
 import useSWR from 'swr'
-import { User, Response } from '../types/responseTypes'
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect, useState } from 'react'
+import { ResponseResult } from '../types/vo/response'
+import { UserVO } from '../types/vo/userVO'
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   const { pathname } = router
@@ -20,7 +21,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   const dispatch = useDispatch()
 
 
-  useSWR({ url: '/api/auth/refresh' }, protectedFetcher<Response<User>>, {
+  useSWR({ url: '/api/auth/refresh' }, protectedFetcher<ResponseResult<UserVO>, null>, {
     onSuccess(data, key, config) {
       // redirect to login page if authentication fails
       if (data.code === 401 && pathname !== '/') {

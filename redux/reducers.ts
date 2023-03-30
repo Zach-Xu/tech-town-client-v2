@@ -1,12 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { InboxVO } from "../types/vo/inboxVO";
 import { UserVO } from "../types/vo/userVO";
 
 export interface AppState {
-    user: UserVO | undefined
+    user: UserVO | undefined,
+    selectedInbox: InboxVO | undefined
 }
 
 const initialState: AppState = {
-    user: undefined
+    user: undefined,
+    selectedInbox: undefined
 }
 
 const appSlice = createSlice({
@@ -16,9 +19,13 @@ const appSlice = createSlice({
         updateUser: (state, action: PayloadAction<UserVO>) => ({
             ...state,
             user: action.payload
+        }),
+        updateSelectedInbox: (state, action: PayloadAction<InboxVO>) => ({
+            ...state,
+            selectedInbox: action.payload
         })
     }
 })
 
-export const { updateUser } = appSlice.actions
+export const { updateUser, updateSelectedInbox } = appSlice.actions
 export default appSlice.reducer

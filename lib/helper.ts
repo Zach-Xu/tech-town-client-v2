@@ -1,3 +1,6 @@
+import { InboxVO, Participant } from "../types/vo/inboxVO"
+import { TYPE } from "./constants"
+
 export const getTimeSince = (createdTimeString: string): string => {
     let createdTime = new Date(createdTimeString)
     const createTimeInMils = createdTime.getTime()
@@ -26,7 +29,7 @@ export const getTimeSince = (createdTimeString: string): string => {
         if (day === 1) {
             return '1 day ago'
         }
-        let ret = day + 'days ago'
+        let ret = day + ' days ago'
         if (day >= 7 && day < 14) {
             ret = '1 week ago'
         } else if (day >= 14 && day < 21) {
@@ -55,4 +58,38 @@ export const getTimeSince = (createdTimeString: string): string => {
     } else {
         return 'just now'
     }
+}
+
+export const sortInboxList = (inboxList: InboxVO[]): InboxVO[] => {
+    const botInbox = inboxList.find((inbox) => inbox.type === TYPE.BOT)
+    const regularInboxes = inboxList.filter((inbox) => inbox.type === TYPE.REGULAR)
+
+    const sortedRegularInboxes = regularInboxes.sort((a, b) => {
+        const aLastMessageTime = new Date(a.lastMessage.createdTime!).getTime()
+        const bLastMessageTime = new Date(b.lastMessage.createdTime!).getTime()
+        return bLastMessageTime - aLastMessageTime
+    })
+
+    if (botInbox) {
+        return [botInbox, ...sortedRegularInboxes]
+    }
+    return sortedRegularInboxes
+}
+
+export const getUsername = (loggedUserId: number, user1: Participant, user2: Participant): string => {
+    return user1.id === loggedUserId ? user2.username : user1.username
+}
+
+export const getUserId = (loggedUserId: number | undefined, user1: Participant | undefined, user2: Participant | undefined): number => {
+    if (!loggedUserId || !user1 || !user2) {
+        return -1
+    }
+    return user1.id === loggedUserId ? user2.id : user1.id
+}
+
+export const getUser = (loggedUserId: number | undefined, user1: Participant | undefined, user2: Participant | undefined): Participant | undefined => {
+    if (!loggedUserId || !user1 || !user2) {
+        return undefined
+    }
+    return user1.id === loggedUserId ? user2 : user1
 }
