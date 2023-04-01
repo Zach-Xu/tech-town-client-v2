@@ -1,18 +1,23 @@
 import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
+import { TYPE } from '../../lib/constants'
 import { AppState } from '../../redux/reducers'
 import { InboxVO } from '../../types/vo/inboxVO'
 import { MessageVO } from '../../types/vo/messageVO'
+import Loading from '../widget/Loading'
 
 type Props = {
     messages: MessageVO[]
     inbox: InboxVO | undefined
-    isLoading: boolean
+    isLoading: boolean,
+    isMessageLoading: boolean
 }
 
-const ChatBox = ({ messages, inbox, isLoading }: Props) => {
+const ChatBox = ({ messages, inbox, isLoading, isMessageLoading }: Props) => {
 
     const loggedInUser = useSelector((state: AppState) => state.user)
+
+    const selectedInbox = useSelector((state: AppState) => state.selectedInbox)
 
     const messageRef = useRef<HTMLDivElement>(null);
 
@@ -58,7 +63,10 @@ const ChatBox = ({ messages, inbox, isLoading }: Props) => {
                     </div>
                 ))
             }
-        </div>
+            {
+                isMessageLoading && selectedInbox?.type === TYPE.BOT ? <Loading /> : ''
+            }
+        </div >
     )
 
 

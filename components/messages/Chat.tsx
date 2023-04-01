@@ -48,7 +48,7 @@ const Chat = ({ mutate }: Props) => {
         url: '/api/inbox/message',
     }
 
-    const { trigger, data, error } = useSWRMutation(sendMessageParams, protectedFetcher<ResponseResult<MessageVO>, MessageDTO>, {
+    const { trigger, isMutating: isMessageLoading, data, error } = useSWRMutation(sendMessageParams, protectedFetcher<ResponseResult<MessageVO>, MessageDTO>, {
         onSuccess(data, key, config) {
             mutate()
             // if fetched message was sent from chatbot, append the message to message list
@@ -77,7 +77,7 @@ const Chat = ({ mutate }: Props) => {
     return (
         <div className='bg-white flex-1  border-l border-gray-200 flex flex-col'>
             <p className='text-xs pl-5 py-2 text-gray-600 border-b text-center'>Recent Messages</p>
-            <ChatBox inbox={inbox} isLoading={isLoading} messages={messages} />
+            <ChatBox inbox={inbox} isLoading={isLoading} messages={messages} isMessageLoading={isMessageLoading} />
             <div className='h-[20vh] flex flex-col bg-gray-100 border-t border-gray-300'>
                 <textarea className="w-full focus:outline-none p-2 overflow-y-scroll bg-gray-100 flex-1 scrollbar-hide" placeholder="Enter a message"
                     value={message} onChange={e => setMessage(e.target.value)}
