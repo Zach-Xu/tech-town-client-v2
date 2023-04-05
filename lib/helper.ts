@@ -1,4 +1,5 @@
 import { InboxVO, Participant } from "../types/vo/inboxVO"
+import { MessageVO } from "../types/vo/messageVO"
 import { TYPE } from "./constants"
 
 export const getTimeSince = (createdTimeString: string): string => {
@@ -74,6 +75,15 @@ export const sortInboxList = (inboxList: InboxVO[]): InboxVO[] => {
         return [botInbox, ...sortedRegularInboxes]
     }
     return sortedRegularInboxes
+}
+
+export const sortMessages = (messages: MessageVO[]): MessageVO[] => {
+    return messages.sort((a, b) => {
+        const aCreatedTime = new Date(a.createdTime!).getTime()
+        const bCreatedTime = new Date(b.createdTime!).getTime()
+        return aCreatedTime - bCreatedTime
+    })
+
 }
 
 export const getUsername = (loggedUserId: number, user1: Participant, user2: Participant): string => {

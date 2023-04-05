@@ -11,6 +11,10 @@ import { protectedFetcher } from '../../lib/fetcher'
 import { VoteVO } from '../../types/vo/questionVO'
 import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
+import UserCard from '../widget/UserCard'
+import { useSelector } from 'react-redux'
+import { AppState } from '../../redux/reducers'
+import store from '../../redux/store'
 
 type Props = {
     question: QuestionDetailVO,
@@ -24,6 +28,8 @@ interface VoteParams {
 const QuestionDetail = ({ question }: Props) => {
 
     const [voteStatus, setVoteStatus] = useState<number>(0)
+
+    const [displayUserCard, setDisplayUserCard] = useState<boolean>(false)
 
     // request for fetching user vote status
     const fetchUserVoteParams: FetchConfig<null> = {
@@ -58,9 +64,7 @@ const QuestionDetail = ({ question }: Props) => {
         voteQuestion()
     }, [voteStatus])
 
-    if (voteVo) {
-        console.log('votevo', voteVo)
-    }
+
 
     const upVoteClickHandler = () => {
 
@@ -81,6 +85,10 @@ const QuestionDetail = ({ question }: Props) => {
         }
     }
 
+    const isUserCardHovered = useSelector((state: AppState) => state.isUserCardHovered)
+
+
+
     return (
         <div className='flex space-x-4 lg:space-x-6 pt-4'>
             <div className='flex flex-col items-center'>
@@ -98,17 +106,29 @@ const QuestionDetail = ({ question }: Props) => {
                         ))
                     }
                 </ul>
-                <div className='flex justify-end space-x-10 mt-2'>
-                    <div className='bg-blue-100 p-2'>
+                <div className='flex justify-end space-x-10 mt-2 relative'>
+                    <UserCard display={displayUserCard} setDisplay={setDisplayUserCard} userId={question.user.id} username={question.user.username} />
+                    <div className='bg-blue-100 p-2'
+                        onMouseLeave={() => setTimeout(() => {
+                            if (!store.getState().isUserCardHovered) {
+                                setDisplayUserCard(false)
+                            }
+                        }, 1000)}>
                         <p className='text-[0.7rem] text-gray-500'>{`Asked ${getTimeSince(question.createdTime)}`}</p>
                         <div className='flex items-center space-x-2 mt-1 md:mt-2'>
-                            <Image src='/default-user-image.png' className='cursor-pointer' width={36} height={36} alt='user profile picture' />
-                            <span className='text-blue-500 hover:text-blue-400 text-sm cursor-pointer'>{question.user.username}</span>
+                            <Image src='/default-user-image.png' className='cursor-pointer' width={36} height={36} alt='user profile picture'
+                                onMouseOver={() => {
+                                    setTimeout(() => { setDisplayUserCard(true) }, 500)
+                                }}
+                            />
+                            <span className='text-blue-500 hover:text-blue-400 text-sm cursor-pointer'
+                                onMouseOver={() => setTimeout(() => { setDisplayUserCard(true) }, 500)}
+                            >{question.user.username}</span>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

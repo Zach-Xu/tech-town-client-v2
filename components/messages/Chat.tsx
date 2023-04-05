@@ -11,7 +11,7 @@ import { FetchConfig } from '../../types/dto/fetchConfig'
 import { MessageDTO } from '../../types/dto/messageDTO'
 import { REQUEST_METHOD, TYPE } from '../../lib/constants'
 import useSWRMutation from 'swr/mutation'
-import { getUser, getUserId } from '../../lib/helper'
+import { getUser, getUserId, sortMessages } from '../../lib/helper'
 import { toast } from 'react-toastify'
 import { InboxVO } from '../../types/vo/inboxVO'
 
@@ -32,7 +32,7 @@ const Chat = ({ mutate }: Props) => {
     const { isLoading } = useSWR({ url: `/api/inbox/${inbox?.id}` }, protectedFetcher<ResponseResult<MessageVO[]>, null>, {
         onSuccess(data, key, config) {
             if (data.code === 200 && data.data) {
-                setMessages(data.data)
+                setMessages(sortMessages(data.data))
             }
         },
     })

@@ -60,7 +60,7 @@ const Messages = (props: Props) => {
             <section className='my-4 border-l shadow-md rounded-md overflow-hidden flex-1 '>
                 <div className='flex h-full'>
                     <MessagesList inboxes={inboxes} setSelectedInbox={setSelectedInbox} error={error} />
-
+                    <Chat mutate={mutate} />
                 </div>
             </section>
         </div>
