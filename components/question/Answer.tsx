@@ -31,7 +31,7 @@ const Answer = ({ content, createdTime, username, userId }: Props) => {
                     }, 1000)}
                 >
                     <UserCard display={displayUserCard} setDisplay={setDisplayUserCard} userId={userId} username={username} />
-                    <p className='text-[0.7rem] text-gray-500'>{`Answered ${getTimeSince(createdTime)}`}</p>
+                    <p className='text-[0.7rem] text-gray-500'>{`Answered ${getTimeSince(createdTime)} ago`}</p>
                     <div className='flex items-center space-x-2 mt-1 md:mt-2'>
                         <Image src='/default-user-image.png' className='cursor-pointer' width={36} height={36} alt='user profile picture'
                             onMouseOver={() => setTimeout(() => { setDisplayUserCard(true) }, 500)} />

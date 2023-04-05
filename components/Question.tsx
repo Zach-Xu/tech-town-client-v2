@@ -30,7 +30,7 @@ const Question = ({ question }: Props) => {
                 </ul>
 
             </div>
-            <div className='absolute right-2 bottom-1 text-sm'><span className='cursor-pointer text-blue-500 hover:text-blue-300'>{question.user.username}</span>{` asked ${getTimeSince(question.createdTime)}`}</div>
+            <div className='absolute right-2 bottom-1 text-sm'><span className='cursor-pointer text-blue-500 hover:text-blue-300'>{question.user.username}</span>{` asked ${getTimeSince(question.createdTime)} ago`}</div>
         </div>
     )
 }

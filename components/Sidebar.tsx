@@ -1,10 +1,15 @@
 import React from 'react'
 import { HomeIcon, BellIcon, EnvelopeIcon, UserIcon, QuestionMarkCircleIcon, BookmarkIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
+import { useSelector } from 'react-redux'
+import { AppState } from '../redux/reducers'
 
 type Props = {}
 
 const Sidebar = (props: Props) => {
+
+    const loggedInUser = useSelector((state: AppState) => state.user)
+
     return (
         <div className='h-[calc(100vh-50px)] top-[50px] sticky hidden md:inline-block  2xl:w-[calc((100vw-960px)/2)]'>
             <div className='flex flex-col h-full justify-center items-end pl-5'>
@@ -43,7 +48,7 @@ const Sidebar = (props: Props) => {
                             <div className='text-xl hidden 2xl:inline-block'>Bookmarks</div>
                         </button>
                     </Link>
-                    <Link href={`/profile`} className='hover:text-blue-300'>
+                    <Link href={`/profile/${loggedInUser?.id}`} className='hover:text-blue-300'>
                         <button className='flex items-center space-x-3'>
                             <UserIcon className='w-8 h-8' />
                             <div className='text-xl hidden 2xl:inline-block'>Profile</div>

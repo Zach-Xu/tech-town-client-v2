@@ -114,7 +114,7 @@ const QuestionDetail = ({ question }: Props) => {
                                 setDisplayUserCard(false)
                             }
                         }, 1000)}>
-                        <p className='text-[0.7rem] text-gray-500'>{`Asked ${getTimeSince(question.createdTime)}`}</p>
+                        <p className='text-[0.7rem] text-gray-500'>{`Asked ${getTimeSince(question.createdTime)} ago`}</p>
                         <div className='flex items-center space-x-2 mt-1 md:mt-2'>
                             <Image src='/default-user-image.png' className='cursor-pointer' width={36} height={36} alt='user profile picture'
                                 onMouseOver={() => {

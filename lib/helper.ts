@@ -18,44 +18,44 @@ export const getTimeSince = (createdTimeString: string): string => {
 
     if (year > 0) {
         if (year === 1) {
-            return '1 year ago'
+            return '1 year'
         }
-        return year + ' years ago'
+        return year + ' years'
     } else if (month > 0) {
         if (month === 1) {
-            return '1 month ago'
+            return '1 month'
         }
-        return month + ' months ago'
+        return month + ' months'
     } else if (day > 0) {
         if (day === 1) {
-            return '1 day ago'
+            return '1 day'
         }
-        let ret = day + ' days ago'
+        let ret = day + ' days'
         if (day >= 7 && day < 14) {
-            ret = '1 week ago'
+            ret = '1 week'
         } else if (day >= 14 && day < 21) {
-            ret = '2 weeks ago'
+            ret = '2 weeks'
         } else if (day >= 21 && day < 28) {
-            ret = '3 weeks ago'
+            ret = '3 weeks'
         } else if (day >= 28 && day < 31) {
-            ret = '4 weeks ago'
+            ret = '4 weeks'
         }
         return ret
     } else if (hour > 0) {
         if (hour === 1) {
-            return '1 hour ago'
+            return '1 hour'
         }
-        return hour + ' hours ago'
+        return hour + ' hours'
     } else if (minute > 0) {
         if (minute === 1) {
-            return '1 min ago'
+            return '1 min'
         }
-        return minute + ' mins ago'
+        return minute + ' mins'
     } else if (second > 0) {
         if (second === 1) {
-            return '1 sec ago'
+            return '1 sec'
         }
-        return second + ' secs ago'
+        return second + ' secs'
     } else {
         return 'just now'
     }
