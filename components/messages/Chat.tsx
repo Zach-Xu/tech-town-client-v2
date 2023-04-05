@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
-import ChatBox from './ChatBox'
+import ChatBox from './MessageBox'
 import useSWR, { KeyedMutator } from 'swr'
 import { protectedFetcher } from '../../lib/fetcher'
 import { MessageVO } from '../../types/vo/messageVO'
@@ -14,14 +14,21 @@ import useSWRMutation from 'swr/mutation'
 import { getUser, getUserId, sortMessages } from '../../lib/helper'
 import { toast } from 'react-toastify'
 import { InboxVO } from '../../types/vo/inboxVO'
+import { useRouter } from 'next/router'
+import MessageBox from './MessageBox'
 
 type Props = {
     mutate: KeyedMutator<ResponseResult<InboxVO[]>>
 }
 
 const Chat = ({ mutate }: Props) => {
+    const { query } = useRouter()
 
-    const inbox = useSelector((state: AppState) => state.selectedInbox)
+    console.log('query', query)
+
+    const inboxId = query.inboxId
+
+    const selectedInbox = useSelector((state: AppState) => state.selectedInbox)
 
     const loggedInUser = useSelector((state: AppState) => state.user)
 
@@ -29,7 +36,7 @@ const Chat = ({ mutate }: Props) => {
 
     const [messages, setMessages] = useState<MessageVO[]>([])
 
-    const { isLoading } = useSWR({ url: `/api/inbox/${inbox?.id}` }, protectedFetcher<ResponseResult<MessageVO[]>, null>, {
+    const { isLoading } = useSWR({ url: `/api/inbox/${Number(inboxId)}` }, protectedFetcher<ResponseResult<MessageVO[]>, null>, {
         onSuccess(data, key, config) {
             if (data.code === 200 && data.data) {
                 setMessages(sortMessages(data.data))
@@ -41,8 +48,8 @@ const Chat = ({ mutate }: Props) => {
     const sendMessageParams: FetchConfig<MessageDTO> = {
         data: {
             content: message,
-            receiverId: getUserId(loggedInUser?.id, inbox?.participants[0], inbox?.participants[1]),
-            type: getUserId(loggedInUser?.id, inbox?.participants[0], inbox?.participants[1]) === 1 ? TYPE.BOT : TYPE.REGULAR
+            receiverId: getUserId(loggedInUser?.id, selectedInbox?.participants[0], selectedInbox?.participants[1]),
+            type: getUserId(loggedInUser?.id, selectedInbox?.participants[0], selectedInbox?.participants[1]) === 1 ? TYPE.BOT : TYPE.REGULAR
         },
         method: REQUEST_METHOD.POST,
         url: '/api/inbox/message',
@@ -59,7 +66,7 @@ const Chat = ({ mutate }: Props) => {
     })
 
     const sendMessage = () => {
-        if (!inbox) {
+        if (!selectedInbox) {
             return toast.error('Please select a user to send the message')
         }
         trigger()
@@ -67,8 +74,8 @@ const Chat = ({ mutate }: Props) => {
         const lastMessage: MessageVO = {
             content: message,
             id: Date.now(),
-            inbox: inbox,
-            receiver: getUser(loggedInUser!.id, inbox.participants[0], inbox.participants[1])!,
+            inbox: selectedInbox,
+            receiver: getUser(loggedInUser!.id, selectedInbox.participants[0], selectedInbox.participants[1])!,
             sender: loggedInUser!
         }
         setMessages([...messages, lastMessage])
@@ -77,7 +84,7 @@ const Chat = ({ mutate }: Props) => {
     return (
         <div className='bg-white flex-1  border-l border-gray-200 flex flex-col'>
             <p className='text-xs pl-5 py-2 text-gray-600 border-b text-center'>Recent Messages</p>
-            <ChatBox inbox={inbox} isLoading={isLoading} messages={messages} isMessageLoading={isMessageLoading} />
+            <MessageBox isLoading={isLoading} isMessageLoading={isMessageLoading} messages={messages} />
             <div className='h-[20vh] flex flex-col bg-gray-100 border-t border-gray-300'>
                 <textarea className="w-full focus:outline-none p-2 overflow-y-scroll bg-gray-100 flex-1 scrollbar-hide" placeholder="Enter a message"
                     value={message} onChange={e => setMessage(e.target.value)}

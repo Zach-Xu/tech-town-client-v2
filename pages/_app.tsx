@@ -4,21 +4,24 @@ import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import { SWRConfig } from 'swr'
 import { fetcher, protectedFetcher } from '../lib/fetcher'
-import { Provider } from 'react-redux'
+import { Provider, useSelector } from 'react-redux'
 import store from '../redux/store'
 import { useDispatch } from 'react-redux'
-import { updateUser } from '../redux/reducers'
+import { AppState, updateUser } from '../redux/reducers'
 import useSWR from 'swr'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ResponseResult } from '../types/vo/response'
 import { UserVO } from '../types/vo/userVO'
+import InboxList from '../components/messages/InboxList'
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   const { pathname } = router
 
   const dispatch = useDispatch()
+
+
 
 
   useSWR({ url: '/api/auth/refresh' }, protectedFetcher<ResponseResult<UserVO>, null>, {
@@ -52,6 +55,11 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   if (pathname === '/') {
     return <Component {...pageProps} />
   }
+
+  if (pathname.includes('/messages')) {
+    return <MessageLayout><Component {...pageProps} /></MessageLayout>
+  }
+
   return (
     <Layout><Component {...pageProps} /></Layout>
   )
@@ -75,6 +83,7 @@ export default function App(props: AppProps) {
 
 
 const Layout: React.FC<{ children: any }> = (props) => {
+
   return (
     <div className='w-screen h-screen overflow-y-scroll flex flex-col bg-gradient-to-r from-white to-blue-200' >
       <Header />
@@ -87,5 +96,24 @@ const Layout: React.FC<{ children: any }> = (props) => {
         </main>
       </section>
     </div >
+  )
+}
+
+const MessageLayout: React.FC<{ children: any }> = (props) => {
+
+  return (
+    <Layout>
+      <div className='max-w-[900px] md:py-5 md:px-10 mt-2 md:mt-0 mx-2 md:mx-0 flex flex-col h-full'>
+        <header className='bg-white font-semibold text-gray-500 py-2 px-4 rounded-md shadow-md text-center md:text-left'>My messages</header>
+        <section className='my-4 border-l shadow-md rounded-md overflow-hidden flex-1 '>
+          <div className='flex h-full'>
+            <InboxList />
+            {
+              props.children
+            }
+          </div>
+        </section>
+      </div>
+    </Layout>
   )
 }

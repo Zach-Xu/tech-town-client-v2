@@ -2,25 +2,22 @@ import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { TYPE } from '../../lib/constants'
 import { AppState } from '../../redux/reducers'
-import { InboxVO } from '../../types/vo/inboxVO'
 import { MessageVO } from '../../types/vo/messageVO'
 import Loading from '../widget/Loading'
 
 type Props = {
     messages: MessageVO[]
-    inbox: InboxVO | undefined
     isLoading: boolean,
     isMessageLoading: boolean
 }
 
-const ChatBox = ({ messages, inbox, isLoading, isMessageLoading }: Props) => {
+const MessageBox = ({ messages, isLoading, isMessageLoading }: Props) => {
 
     const loggedInUser = useSelector((state: AppState) => state.user)
 
-    const selectedInbox = useSelector((state: AppState) => state.selectedInbox)
-
     const messageRef = useRef<HTMLDivElement>(null);
 
+    const selectedInbox = useSelector((state: AppState) => state.selectedInbox)
 
 
     useEffect(() => {
@@ -31,11 +28,7 @@ const ChatBox = ({ messages, inbox, isLoading, isMessageLoading }: Props) => {
 
     }, [messages])
 
-    if (!inbox) {
-        return (
-            <div ref={messageRef} className='bg-gray-100 flex-1'></div>
-        )
-    }
+
 
     if (isLoading) {
         <div ref={messageRef} className='bg-gray-100 flex-1'>Loading...</div>
@@ -72,4 +65,4 @@ const ChatBox = ({ messages, inbox, isLoading, isMessageLoading }: Props) => {
 
 }
 
-export default ChatBox
+export default MessageBox

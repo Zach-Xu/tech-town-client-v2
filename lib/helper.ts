@@ -65,9 +65,11 @@ export const sortInboxList = (inboxList: InboxVO[]): InboxVO[] => {
     const botInbox = inboxList.find((inbox) => inbox.type === TYPE.BOT)
     const regularInboxes = inboxList.filter((inbox) => inbox.type === TYPE.REGULAR)
 
+
     const sortedRegularInboxes = regularInboxes.sort((a, b) => {
-        const aLastMessageTime = new Date(a.lastMessage.createdTime!).getTime()
-        const bLastMessageTime = new Date(b.lastMessage.createdTime!).getTime()
+
+        const aLastMessageTime = new Date(a.updatedTime).getTime()
+        const bLastMessageTime = new Date(b.updatedTime).getTime()
         return bLastMessageTime - aLastMessageTime
     })
 

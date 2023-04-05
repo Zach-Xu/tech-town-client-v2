@@ -4,6 +4,7 @@ import { MessageVO } from "./messageVO"
 export interface InboxVO {
     id: number
     participants: Participant[]
+    updatedTime: string
     lastMessage: Message | MessageVO
     type: TYPE
 }

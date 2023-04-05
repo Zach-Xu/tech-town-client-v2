@@ -4,12 +4,14 @@ import { UserVO } from "../types/vo/userVO";
 
 export interface AppState {
     user: UserVO | undefined,
+    inboxList: InboxVO[],
     selectedInbox: InboxVO | undefined,
     isUserCardHovered: boolean
 }
 
 const initialState: AppState = {
     user: undefined,
+    inboxList: [],
     selectedInbox: undefined,
     isUserCardHovered: false
 }
@@ -22,6 +24,10 @@ const appSlice = createSlice({
             ...state,
             user: action.payload
         }),
+        updateInboxList: (state, action: PayloadAction<InboxVO[]>) => ({
+            ...state,
+            inboxList: action.payload
+        }),
         updateSelectedInbox: (state, action: PayloadAction<InboxVO>) => ({
             ...state,
             selectedInbox: action.payload
@@ -33,5 +39,5 @@ const appSlice = createSlice({
     }
 })
 
-export const { updateUser, updateSelectedInbox, updateUserCardHoverState } = appSlice.actions
+export const { updateUser, updateInboxList, updateSelectedInbox, updateUserCardHoverState } = appSlice.actions
 export default appSlice.reducer

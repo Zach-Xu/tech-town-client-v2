@@ -1,12 +1,16 @@
 import React, { Dispatch } from 'react'
 import Image from 'next/image'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppState, updateUserCardHoverState } from '../../redux/reducers'
+import { AppState, updateSelectedInbox, updateUserCardHoverState } from '../../redux/reducers'
 import useSWR from 'swr'
-import { protectedFetcher } from '../../lib/fetcher'
+import { protectedFetcher, protectedFetcherWithExtraParams } from '../../lib/fetcher'
 import { UserCardVO } from '../../types/vo/userCardVO'
 import { ResponseResult } from '../../types/vo/response'
 import { useRouter } from 'next/router'
+import useSWRMutation from 'swr/mutation'
+import { REQUEST_METHOD, TYPE } from '../../lib/constants'
+import { InboxDTO } from '../../types/dto/inboxDTO'
+import { InboxVO } from '../../types/vo/inboxVO'
 
 type Props = {
     display: boolean,
@@ -29,8 +33,36 @@ const UserCard = ({ display, setDisplay, userId, username }: Props) => {
 
     const router = useRouter()
 
-    function toMessagePage(userId: number): void {
-        router.push('/messages', {})
+    // create an inbox
+    const { trigger } = useSWRMutation('/api/inbox', protectedFetcherWithExtraParams<ResponseResult<InboxVO>, InboxDTO>)
+
+    const toMessagePage = (userId: number) => {
+
+        trigger({
+            data: {
+                type: userId === 1 ? TYPE.BOT : TYPE.REGULAR,
+                userId
+            },
+            method: REQUEST_METHOD.POST
+        }, {
+            onSuccess(data, key, config) {
+                console.log('create inbox successfully', data)
+                if (data.code === 201 && data.data) {
+                    dispatch(updateSelectedInbox(data.data))
+                    router.push(`/messages/${data.data.id}`)
+                }
+                if (data.code === 400) {
+                    try {
+                        const inboxId = Number(data.msg.split(':')[1].trim())
+                        router.push(`/messages/${inboxId}`)
+                    } catch (error) {
+                        console.log('Invalid inbox Id')
+                    }
+
+                }
+            },
+        })
+
     }
 
     return (
