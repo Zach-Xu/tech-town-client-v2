@@ -35,7 +35,7 @@ const ProfilePage: NextPage = (props: Props) => {
 
     useEffect(() => {
         mutate()
-    }, [loggedInUser])
+    }, [userId, loggedInUser])
 
     if (isLoading) {
         return <div>Loading...</div>
@@ -47,7 +47,7 @@ const ProfilePage: NextPage = (props: Props) => {
 
     return (
         <div className='max-w-[900px] md:py-5 md:px-10  mx-2 md:mx-0'>
-            <ProfileHeader isEditButtonDisplay={userId === (loggedInUser?.id)?.toString()} username={profile.username} joinTime={profile.joinTime} />
+            <ProfileHeader isEditButtonDisplay={userId === (loggedInUser?.id)?.toString()} avatar={profile.avatar} username={profile.username} joinTime={profile.joinTime} />
 
             <section className='mt-5'>
                 <div className='flex space-x-5'>

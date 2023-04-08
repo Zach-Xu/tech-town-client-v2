@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import Image from 'next/image'
 import { InboxVO } from '../../types/vo/inboxVO'
-import { getUsername, sortInboxList } from '../../lib/helper'
+import { getUser, getUsername, sortInboxList } from '../../lib/helper'
 import { REQUEST_METHOD, TYPE } from '../../lib/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppState, updateInboxList, updateSelectedInbox } from '../../redux/reducers'
@@ -79,7 +79,7 @@ const InboxList = (props: Props) => {
                             <div key={inbox.id} className={`flex items-center px-4 py-3 space-x-3 hover:bg-gray-100 cursor-pointer ${inbox.id.toString() === inboxId ? 'bg-gray-200' : ''}`}
                                 onClick={() => toMessagePage(undefined, inbox)}
                             >
-                                <Image src={inbox.type === TYPE.BOT ? '/chatbot-icon.png' : '/default-user-image.png'} width={36} className='rounded-full' height={36} alt='user profile picture' />
+                                <Image src={inbox.type === TYPE.BOT ? '/chatbot-icon.png' : getUser(user.id, inbox.participants[0], inbox.participants[1])?.avatar || '/default-user-image.png'} width={36} className='rounded-full' height={36} alt='user profile picture' />
                                 <div className='hidden md:flex md:flex-col md:items-start md:justify-center'>
                                     <span className='text-[0.8rem] font-semibold'>{getUsername(user.id, inbox.participants[0], inbox.participants[1])}</span>
                                     {
@@ -101,7 +101,7 @@ const InboxList = (props: Props) => {
                                 inboxList.map(inbox => (
                                     <div key={inbox.id} className={`flex items-center px-4 py-3 space-x-3 hover:bg-gray-100 cursor-pointer  ${inbox.id.toString() == inboxId ? 'bg-gray-200' : ''}`}
                                         onClick={() => toMessagePage(undefined, inbox)}>
-                                        <Image src={'/default-user-image.png'} width={36} className='rounded-full' height={36} alt='user profile picture' />
+                                        <Image src={getUser(user.id, inbox.participants[0], inbox.participants[1])?.avatar || '/default-user-image.png'} width={36} className='rounded-full' height={36} alt='user profile picture' />
                                         <div className='hidden md:flex md:flex-col md:items-start md:justify-center'>
                                             <span className='text-[0.8rem] font-semibold'>{getUsername(user.id, inbox.participants[0], inbox.participants[1])}</span>
                                             {

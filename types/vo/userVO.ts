@@ -2,6 +2,7 @@ export interface UserVO {
     username: string
     email: string
     id: number
+    avatar: string | null
 }
 
 

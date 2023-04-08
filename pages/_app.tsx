@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   useSWR({ url: '/api/auth/refresh' }, protectedFetcher<ResponseResult<UserVO>, null>, {
     onSuccess(data, key, config) {
       // redirect to login page if authentication fails
-      if (data.code === 401 && pathname !== '/') {
+      if (data.code !== 200 && pathname !== '/') {
         toast.error(data.msg)
         return router.push('/')
       }

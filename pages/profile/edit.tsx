@@ -138,7 +138,7 @@ const edit = (props: Props) => {
 
     return (
         <div className='max-w-[900px] md:py-5 md:px-10 mt-2 md:mt-0 mx-2 md:mx-0'>
-            <ProfileHeader isEditButtonDisplay={false} username={profile.username} joinTime={profile.joinTime} />
+            <ProfileHeader isEditButtonDisplay={false} avatar={profile.avatar} username={profile.username} joinTime={profile.joinTime} />
             <h1 className='my-2 font-semibold text-[20px]'>Public Information</h1>
             <div className='bg-white p-2 space-y-2 rounded-md shadow-md'>
                 <div className="form-control w-full max-w-xs">

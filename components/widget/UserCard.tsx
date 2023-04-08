@@ -75,7 +75,7 @@ const UserCard = ({ display, setDisplay, userId, username }: Props) => {
         >
             <div className="card-body py-5 px-4">
                 <div className='flex items-start space-x-2 mt-1 md:mt-2'>
-                    <Image src='/default-user-image.png' className='cursor-pointer' width={36} height={36} alt='user profile picture' />
+                    <Image src={data?.data?.avatar || '/default-user-image.png'} className='cursor-pointer' width={36} height={36} alt='user profile picture' />
                     <div className='space-y-3'>
                         <span className='text-blue-500 hover:text-blue-400 text-base cursor-pointer'>{username}</span>
                         <div className='text-xs md:text-sm flex space-x-3 text-gray-500'>

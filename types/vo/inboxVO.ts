@@ -12,6 +12,7 @@ export interface InboxVO {
 export interface Participant {
     id: number
     username: string
+    avatar: string | null | undefined
 }
 
 interface Message {

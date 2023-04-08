@@ -15,6 +15,7 @@ interface UserVO {
     username: string
     email: string
     id: number
+    avatar: string
 }
 
 export interface QuestionDetailVO {

@@ -4,4 +4,5 @@ export interface UserCardVO {
     questions: number
     answers: number
     isFollowed: boolean
+    avatar: string
 }

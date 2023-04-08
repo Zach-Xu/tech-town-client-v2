@@ -4,6 +4,7 @@ export interface ProfileVO extends ProfileTabVO {
     username: string
     isFollowed: string
     github: string
+    avatar: string
 }
 
 export interface SkillVO {

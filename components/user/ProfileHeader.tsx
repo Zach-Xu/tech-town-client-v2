@@ -11,17 +11,20 @@ type Props = {
     isEditButtonDisplay: boolean
     username: string
     joinTime: string
+    avatar: string | null | undefined
 }
 
-const ProfileHeader = ({ isEditButtonDisplay, username, joinTime }: Props) => {
+const ProfileHeader = ({ isEditButtonDisplay, username, joinTime, avatar }: Props) => {
 
     const router = useRouter()
+
+    const loggedInUser = useSelector((state: AppState) => state.user)
 
     return (
         <header className='flex justify-between shadow-md px-3 py-4'>
             <div className='flex space-x-5 items-center'>
                 <div className='relative w-16 h-16  md:w-20 md:h-20 lg:w-32 lg:h-32'>
-                    <Image src={'/default-user-image.png'} fill={true} style={{ objectFit: 'cover' }} alt='profile picture' />
+                    <Image src={avatar || '/default-user-image.png'} fill={true} style={{ objectFit: 'cover' }} alt='profile picture' />
                 </div>
                 <div className='space-y-2'>
                     <p className='font-semibold text-lg md:text-2xl lg:text-3xl'>{username}</p>
