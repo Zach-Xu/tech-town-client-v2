@@ -47,21 +47,13 @@ const Profile = ({ profile }: Props) => {
                         <div className='text-center'>
                             <h5 className='font-semibold text-base md:text-xl mb-2'>Skill Set</h5>
                             <div className='grid grid-cols-2 md:flex md:flex-row  justify-center  md:space-x-5 items-center'>
-                                <div className='flex items-center space-x-1 md:ml-0 ml-4'>
-                                    <CheckIcon className='h-6 w-6' /><span>JavaScript</span>
-                                </div>
-                                <div className='flex items-center space-x-1 md:ml-0 ml-4'>
-                                    <CheckIcon className='h-6 w-6' /><span>C#</span>
-                                </div>
-                                <div className='flex items-center space-x-1 md:ml-0 ml-4'>
-                                    <CheckIcon className='h-6 w-6' /><span>MySQL</span>
-                                </div>
-                                <div className='flex items-center space-x-1 md:ml-0 ml-4'>
-                                    <CheckIcon className='h-6 w-6' /><span>React</span>
-                                </div>
-                                <div className='flex items-center space-x-1 md:ml-0 ml-4'>
-                                    <CheckIcon className='h-6 w-6' /><span>Java</span>
-                                </div>
+                                {
+                                    profile.skills.map(skill => (
+                                        <div className='flex items-center space-x-1 md:ml-0 ml-4' key={skill.id}>
+                                            <CheckIcon className='h-6 w-6' /><span>{skill.skillName}</span>
+                                        </div>
+                                    ))
+                                }
                             </div>
                         </div>
                     </Fragment>

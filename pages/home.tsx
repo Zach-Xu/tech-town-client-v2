@@ -9,10 +9,8 @@ import { ResponseResult } from '../types/vo/response'
 
 const Home: NextPage = () => {
 
-    const { data, error, isLoading } = useSWR('/api/questions', fetcher<ResponseResult<QuestionVO[]>>)
-    if (error) {
-        console.log(error)
-    }
+    const { data, isLoading } = useSWR('/api/questions', fetcher<ResponseResult<QuestionVO[]>>)
+
     if (data) {
         console.log(data)
     }

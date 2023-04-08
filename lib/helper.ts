@@ -105,3 +105,17 @@ export const getUser = (loggedUserId: number | undefined, user1: Participant | u
     }
     return user1.id === loggedUserId ? user2 : user1
 }
+
+export const getGitHubUsername = (githubLink: string): string | null => {
+
+    // Regular expression to extract the username from a GitHub user link
+    const regex = /^https?:\/\/github\.com\/([a-zA-Z\d](?:[a-zA-Z\d]|-(?=[a-zA-Z\d])){0,38})\/?$/
+
+    const matches = githubLink.match(regex)
+
+    if (matches && matches.length > 1) {
+        return matches[1]
+    } else {
+        return null
+    }
+}
