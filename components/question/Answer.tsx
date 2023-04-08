@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import { getTimeSince } from '../../lib/helper'
 import UserCard from '../widget/UserCard'
-import { useSelector } from 'react-redux'
-import { AppState } from '../../redux/reducers'
 import store from '../../redux/store'
 
 type Props = {
@@ -11,13 +9,12 @@ type Props = {
     createdTime: string
     username: string
     userId: number
+    avatar: string | undefined | null
 }
 
-const Answer = ({ content, createdTime, username, userId }: Props) => {
+const Answer = ({ content, createdTime, username, userId, avatar }: Props) => {
 
     const [displayUserCard, setDisplayUserCard] = useState<boolean>(false)
-
-    const isUserCardHovered = useSelector((state: AppState) => state.isUserCardHovered)
 
     return (
         <div >
@@ -33,7 +30,7 @@ const Answer = ({ content, createdTime, username, userId }: Props) => {
                     <UserCard display={displayUserCard} setDisplay={setDisplayUserCard} userId={userId} username={username} />
                     <p className='text-[0.7rem] text-gray-500'>{`Answered ${getTimeSince(createdTime)} ago`}</p>
                     <div className='flex items-center space-x-2 mt-1 md:mt-2'>
-                        <Image src='/default-user-image.png' className='cursor-pointer' width={36} height={36} alt='user profile picture'
+                        <Image src={avatar || '/default-user-image.png'} className='cursor-pointer' width={36} height={36} alt='user profile picture'
                             onMouseOver={() => setTimeout(() => { setDisplayUserCard(true) }, 500)} />
                         <span className='text-blue-500 hover:text-blue-400 text-sm cursor-pointer'
                             onMouseOver={() => setTimeout(() => { setDisplayUserCard(true) }, 500)}>{username}</span>

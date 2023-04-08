@@ -21,7 +21,7 @@ const GitHub = ({ username }: Props) => {
     }
 
     if (username === null) {
-        return <div>Oops, This user has not yet linked his or her GitHub Page, check again in another time</div>
+        return <div className='rounded-md p-2 my-4 text-red-500'>Oops, This user has not yet linked his or her GitHub Page, check again in another time</div>
     }
 
     return (

@@ -1,55 +1,40 @@
 import React, { useEffect, useState } from 'react'
 import { QuestionDetailVO } from '../../types/vo/questionDetailVO'
-import { ChevronUpIcon, ChevronDownIcon, BookmarkIcon } from '@heroicons/react/24/outline'
+import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
+import { BookmarkIcon } from '@heroicons/react/24/solid'
 import Tag from '../../components/widget/Tag'
 import Image from 'next/image'
 import { getTimeSince } from '../../lib/helper'
 import { FetchConfig } from '../../types/dto/fetchConfig'
 import { REQUEST_METHOD, VOTE_STATUS } from '../../lib/constants'
 import { ResponseResult } from '../../types/vo/response'
-import { protectedFetcher } from '../../lib/fetcher'
+import { protectedFetcher, protectedFetcherWithExtraParams } from '../../lib/fetcher'
 import { VoteVO } from '../../types/vo/questionVO'
-import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
 import UserCard from '../widget/UserCard'
-import { useSelector } from 'react-redux'
-import { AppState } from '../../redux/reducers'
 import store from '../../redux/store'
+import { toast } from 'react-toastify'
 
 type Props = {
     question: QuestionDetailVO,
-
+    userVoteStatus: number
+    isUserBookMarked: boolean
 }
 
 interface VoteParams {
     status: number
 }
 
-const QuestionDetail = ({ question }: Props) => {
+const QuestionDetail = ({ question, userVoteStatus, isUserBookMarked }: Props) => {
 
-    const [voteStatus, setVoteStatus] = useState<number>(0)
+    const [voteStatus, setVoteStatus] = useState<number>(userVoteStatus)
+
+    const [isBookmarked, setIsBookmarked] = useState<boolean>(isUserBookMarked)
 
     const [displayUserCard, setDisplayUserCard] = useState<boolean>(false)
 
-    // request for fetching user vote status
-    const fetchUserVoteParams: FetchConfig<null> = {
-        method: REQUEST_METHOD.GET,
-        url: `/api/questions/${question.id}/vote`,
-        data: null
-    }
-    const { isLoading } = useSWR(fetchUserVoteParams, protectedFetcher<ResponseResult<VoteVO>, null>, {
-        onSuccess(data, key, config) {
-            if (data.code === 200 && data.data && data.data.status !== VOTE_STATUS.CANCEL) {
-                setVoteStatus(data.data.status)
-            }
-            if (data.code !== 200 && question.id) {
-                console.error('Failed to fetch user vote info')
-            }
-        },
-    })
 
-
-    // request for voting question
+    // request for voting a question
     const voteQuestionParams: FetchConfig<VoteParams> = {
         data: {
             status: voteStatus
@@ -64,6 +49,30 @@ const QuestionDetail = ({ question }: Props) => {
         voteQuestion()
     }, [voteStatus])
 
+
+    const { trigger } = useSWRMutation(`/api/questions/bookmark/${question.id}`, protectedFetcherWithExtraParams<ResponseResult<null>, null>, {
+        onSuccess(data, key, config) {
+            if (data.code === 200) {
+                toast.success(data.msg)
+            }
+        },
+    })
+
+    const bookmarkQuestion = () => {
+        if (isUserBookMarked) {
+            trigger({
+                method: REQUEST_METHOD.DELETE,
+                data: null
+            })
+            setIsBookmarked(false)
+        } else {
+            trigger({
+                method: REQUEST_METHOD.POST,
+                data: null
+            })
+            setIsBookmarked(true)
+        }
+    }
 
 
     const upVoteClickHandler = () => {
@@ -85,9 +94,6 @@ const QuestionDetail = ({ question }: Props) => {
         }
     }
 
-    const isUserCardHovered = useSelector((state: AppState) => state.isUserCardHovered)
-
-
 
     return (
         <div className='flex space-x-4 lg:space-x-6 pt-4'>
@@ -95,7 +101,7 @@ const QuestionDetail = ({ question }: Props) => {
                 <ChevronUpIcon className={`w-6 h-6 md:w-10 md:h-10 ${voteStatus === VOTE_STATUS.UP_VOTE ? 'text-blue-400' : ' text-gray-300'} cursor-pointer`} onClick={upVoteClickHandler} />
                 <span className='text-lg md:text-xl text-gray-500'>{voteVo?.data?.id ? voteVo.data.question.upVotes - voteVo.data.question.downVotes : question.upVotes - question.downVotes}</span>
                 <ChevronDownIcon className={`w-6 h-6 md:w-10 md:h-10 ${voteStatus === VOTE_STATUS.DOWN_VOTE ? 'text-blue-400' : ' text-gray-300'} cursor-pointer`} onClick={downVoteClickHandler} />
-                <BookmarkIcon className='w-3 h-3 md:w-7 md:h-7 text-gray-300 cursor-pointer' />
+                <BookmarkIcon className={`w-3 h-3 md:w-7 md:h-7 cursor-pointer ${isBookmarked ? 'text-blue-400' : ' text-gray-300'}`} onClick={bookmarkQuestion} />
             </div>
             <div className='flex-1 flex flex-col'>
                 <div dangerouslySetInnerHTML={{ __html: question.content }} className='flex-1 flex-wrap'></div>

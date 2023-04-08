@@ -11,6 +11,7 @@ import { ResponseResult } from '../../types/vo/response'
 import { QuestionDTO, TagDTO } from '../../types/dto/questionDTO'
 import { FetchConfig } from '../../types/dto/fetchConfig'
 import { QuestionVO } from '../../types/vo/questionVO'
+import { useRouter } from 'next/router'
 
 
 type Props = {}
@@ -85,13 +86,15 @@ const Ask: NextPage = (props: Props) => {
         url: '/api/questions',
     }
 
+    const router = useRouter()
+
     const { trigger, data, error } = useSWRMutation(postQuestionParams, protectedFetcher<ResponseResult<QuestionVO>, QuestionDTO>, {
         onSuccess(data, key, config) {
-            if (data.code == 201) {
+            if (data.code == 201 && data.data) {
                 toast.success(data.msg)
-                return
+                return router.push(`/questions/${data.data.id}`)
             }
-            if (data.code == 401 || data.code == 400) {
+            else {
                 toast.error(data.msg)
             }
         },

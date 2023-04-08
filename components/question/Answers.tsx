@@ -12,7 +12,7 @@ const Answers = ({ answers }: Props) => {
             <div className='text-lg pt-4 font-semibold'>{answers.length} Answers</div>
             {
                 answers.map(answer => (
-                    <Answer key={answer.id} content={answer.content} createdTime={answer.createdTime} username={answer.user.username} userId={answer.user.id} />
+                    <Answer key={answer.id} content={answer.content} createdTime={answer.createdTime} username={answer.user.username} userId={answer.user.id} avatar={answer.user.avatar} />
 
                 ))
             }
