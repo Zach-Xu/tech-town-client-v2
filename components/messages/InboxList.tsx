@@ -23,7 +23,7 @@ const InboxList = (props: Props) => {
     const dispatch = useDispatch()
 
     // fetch inbox list
-    const { } = useSWR({ url: '/api/inbox/all' }, protectedFetcher<ResponseResult<InboxVO[]>, null>, {
+    useSWR({ url: '/api/inbox/all' }, protectedFetcher<ResponseResult<InboxVO[]>, null>, {
         onSuccess(data, key, config) {
             if (data.code === 200 && data.data) {
                 dispatch(updateInboxList(sortInboxList(data.data)))

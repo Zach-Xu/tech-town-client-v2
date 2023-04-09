@@ -34,7 +34,6 @@ function MyApp({ Component, pageProps, router }: AppProps) {
 
       // update global user info on page refresh
       if (data.code === 200) {
-        console.log('refresh user info', data)
         dispatch(updateUser(data.data!))
         if (pathname === '/') {
           return router.push('/home')
