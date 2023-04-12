@@ -22,8 +22,6 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   const dispatch = useDispatch()
 
 
-
-
   useSWR({ url: '/api/auth/refresh' }, protectedFetcher<ResponseResult<UserVO>, null>, {
     onSuccess(data, key, config) {
       // redirect to login page if authentication fails

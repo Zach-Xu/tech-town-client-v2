@@ -7,7 +7,8 @@ const nextConfig = (phase) => {
     return {
       reactStrictMode: false,
       env: {
-        API_BASE_URL: 'http://localhost:8084'
+        API_BASE_URL: 'http://localhost:8084',
+        WEBSOCKET_BASE_URL: 'ws://localhost:8084/websocket'
       },
       images: {
         remotePatterns: [
@@ -18,7 +19,8 @@ const nextConfig = (phase) => {
             pathname: '/**'
           }
         ]
-      }
+      },
+
     }
   }
 

@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
-import ChatBox from './MessageBox'
 import useSWR, { KeyedMutator } from 'swr'
 import { protectedFetcher } from '../../lib/fetcher'
 import { MessageVO } from '../../types/vo/messageVO'
@@ -13,18 +12,20 @@ import { REQUEST_METHOD, TYPE } from '../../lib/constants'
 import useSWRMutation from 'swr/mutation'
 import { getUser, getUserId, sortMessages } from '../../lib/helper'
 import { toast } from 'react-toastify'
-import { InboxVO } from '../../types/vo/inboxVO'
+import { InboxVO, Participant } from '../../types/vo/inboxVO'
 import { useRouter } from 'next/router'
 import MessageBox from './MessageBox'
+import { SocketMessage } from '../../types/dto/socketMessageDTO'
 
 type Props = {
     mutate: KeyedMutator<ResponseResult<InboxVO[]>>
+    socketMessage: string | undefined
+    setSocketMessage: React.Dispatch<React.SetStateAction<string | undefined>>,
+    sendSocketMessage: (message: SocketMessage) => void
 }
 
-const Chat = ({ mutate }: Props) => {
+const Chat = ({ mutate, socketMessage, setSocketMessage, sendSocketMessage }: Props) => {
     const { query } = useRouter()
-
-    console.log('query', query)
 
     const inboxId = query.inboxId
 
@@ -36,12 +37,15 @@ const Chat = ({ mutate }: Props) => {
 
     const [messages, setMessages] = useState<MessageVO[]>([])
 
-    const { isLoading } = useSWR({ url: `/api/inbox/${Number(inboxId)}` }, protectedFetcher<ResponseResult<MessageVO[]>, null>, {
+    const { isLoading } = useSWR({ url: `/api/inbox/${Number(inboxId)}/messages` }, protectedFetcher<ResponseResult<MessageVO[]>, null>, {
         onSuccess(data, key, config) {
             if (data.code === 200 && data.data) {
                 setMessages(sortMessages(data.data))
             }
         },
+        revalidateOnFocus: false,
+        refreshWhenHidden: false,
+        revalidateOnReconnect: false,
     })
 
 
@@ -55,31 +59,52 @@ const Chat = ({ mutate }: Props) => {
         url: '/api/inbox/message',
     }
 
-    const { trigger, isMutating: isMessageLoading, data, error } = useSWRMutation(sendMessageParams, protectedFetcher<ResponseResult<MessageVO>, MessageDTO>, {
-        onSuccess(data, key, config) {
-            mutate()
-            // if fetched message was sent from chatbot, append the message to message list
-            if (data.code === 201 && data.data && data.data.sender.id === 1) {
-                setMessages(msgs => [...msgs, data.data!])
-            }
+    const { trigger, isMutating: isMessageLoading, data, error } = useSWRMutation(sendMessageParams, protectedFetcher<ResponseResult<MessageVO>, MessageDTO>)
+
+
+    useEffect(() => {
+        if (socketMessage && socketMessage) {
+            setMessages([...messages, JSON.parse(socketMessage)])
+            setSocketMessage(undefined)
         }
-    })
+    }, [socketMessage])
 
     const sendMessage = () => {
         if (!selectedInbox) {
             return toast.error('Please select a user to send the message')
         }
-        trigger()
+        const receiver: Participant = getUser(loggedInUser!.id, selectedInbox.participants[0], selectedInbox.participants[1])!
+
         setMessage('')
         const lastMessage: MessageVO = {
             content: message,
             id: Date.now(),
             inbox: selectedInbox,
-            receiver: getUser(loggedInUser!.id, selectedInbox.participants[0], selectedInbox.participants[1])!,
+            receiver: receiver,
             sender: loggedInUser!
         }
         setMessages([...messages, lastMessage])
+
+        trigger(null, {
+            onSuccess: (data, key, config) => {
+                mutate()
+                // if fetched message was sent from chatbot, append the message to message list
+                if (data.code === 201 && data.data && data.data.sender.id === 1) {
+                    setMessages(msgs => [...msgs, data.data!])
+                }
+
+                if (receiver.id !== 1 && sendSocketMessage) {
+                    sendSocketMessage({
+                        actionType: 'send message',
+                        roomId: Number(inboxId),
+                        message: JSON.stringify(lastMessage)
+                    })
+                }
+            }
+        })
+
     }
+
 
     return (
         <div className='bg-white flex-1  border-l border-gray-200 flex flex-col'>

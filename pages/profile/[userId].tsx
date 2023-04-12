@@ -77,7 +77,7 @@ const ProfilePage: NextPage = (props: Props) => {
                 {/* Activity */}
 
                 {
-                    tab === 'activity' && <Activity userId={Number(userId)} />
+                    tab === 'activity' && <Activity userId={Number(userId)} username={profile.username} />
                 }
 
                 {/* Repositories */}

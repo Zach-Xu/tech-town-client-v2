@@ -22,13 +22,17 @@ const InboxList = (props: Props) => {
 
     const dispatch = useDispatch()
 
+
     // fetch inbox list
     useSWR({ url: '/api/inbox/all' }, protectedFetcher<ResponseResult<InboxVO[]>, null>, {
         onSuccess(data, key, config) {
+            console.log('12321')
             if (data.code === 200 && data.data) {
                 dispatch(updateInboxList(sortInboxList(data.data)))
             }
-        }
+        },
+        revalidateOnFocus: false,
+        refreshWhenHidden: false,
     })
 
     const inboxList = useSelector((state: AppState) => state.inboxList)

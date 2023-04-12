@@ -3,10 +3,16 @@ import { HomeIcon, BellIcon, EnvelopeIcon, UserIcon, QuestionMarkCircleIcon, Boo
 import Link from 'next/link'
 import { useSelector } from 'react-redux'
 import { AppState } from '../redux/reducers'
+import useWebSocket from '../hooks/useWebSocket'
+import { TECH_TOWN_TOKEN } from '../lib/constants'
 
 type Props = {}
 
 const Sidebar = (props: Props) => {
+
+    const token = typeof window !== 'undefined' ? localStorage.getItem(TECH_TOWN_TOKEN) : null;
+
+    useWebSocket(token);
 
     const loggedInUser = useSelector((state: AppState) => state.user)
 

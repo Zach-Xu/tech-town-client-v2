@@ -17,4 +17,10 @@ export enum VOTE_STATUS {
     DOWN_VOTE = 2
 }
 
+export enum ACTION {
+    VOTE = 'VOTE',
+    ANSWER = 'ANSWER',
+    QUESTION = 'QUESTION'
+}
+
 export const TECH_TOWN_TOKEN: string = 'tech-town-token'

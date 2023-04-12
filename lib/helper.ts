@@ -1,6 +1,6 @@
 import { InboxVO, Participant } from "../types/vo/inboxVO"
 import { MessageVO } from "../types/vo/messageVO"
-import { TYPE } from "./constants"
+import { ACTION, TYPE } from "./constants"
 
 export const getTimeSince = (createdTimeString: string): string => {
     let createdTime = new Date(createdTimeString)
@@ -117,5 +117,18 @@ export const getGitHubUsername = (githubLink: string): string | null => {
         return matches[1]
     } else {
         return null
+    }
+}
+
+export const getActivityAction = (action: string): string => {
+    switch (action) {
+        case ACTION.VOTE:
+            return 'up-voted'
+        case ACTION.QUESTION:
+            return 'asked'
+        case ACTION.VOTE:
+            return 'answered'
+        default:
+            return ''
     }
 }
