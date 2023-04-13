@@ -33,12 +33,14 @@ const Sidebar = (props: Props) => {
                             <div className='text-xl hidden 2xl:inline-block'>Questions</div>
                         </button>
                     </Link>
-                    <Link href={`/notifications`} className='hover:text-blue-300'>
+
+                    {/* ToDo */}
+                    {/* <Link href={`/notifications`} className='hover:text-blue-300'>
                         <button className='flex items-center space-x-3'>
                             <BellIcon className='w-8 h-8' />
                             <div className='text-xl hidden 2xl:inline-block'>Notifications</div>
                         </button>
-                    </Link>
+                    </Link> */}
 
                     <Link href={`/messages`} className='hover:text-blue-300'>
                         <button className='flex items-center space-x-3'>

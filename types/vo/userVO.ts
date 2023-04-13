@@ -11,3 +11,11 @@ export interface TokenUser {
     user: UserVO
 }
 
+export interface SearchUserVo {
+    id: number
+    username: string
+    avatar: string
+    createdTime: string
+    bio: string
+    skills: string[]
+}

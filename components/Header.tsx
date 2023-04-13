@@ -17,6 +17,8 @@ const Header = (props: Props) => {
 
     const [keyword, setKeyword] = useState<string>('')
 
+    const [searchType, setSearchType] = useState<string>('question')
+
     const logout = () => {
         if (typeof window !== 'undefined') {
             localStorage.removeItem(TECH_TOWN_TOKEN)
@@ -32,7 +34,12 @@ const Header = (props: Props) => {
         if (keyword.trim() === '') {
             return toast.error('Keyword cannot be empty!')
         }
-        router.push(`/questions?keyword=${encodeURIComponent(keyword)}`)
+        if (searchType === 'question') {
+            router.push(`/questions?keyword=${encodeURIComponent(keyword)}`)
+        } else {
+            router.push(`/users?keyword=${encodeURIComponent(keyword)}`)
+        }
+
     }
 
     return (
@@ -41,7 +48,12 @@ const Header = (props: Props) => {
                 <Image src='/logo.png' width={36} height={36} className='hidden md:inline-block' alt='Tech Town Logo' />
                 <div className='flex bg-gray-100 py-2 flex-1 rounded-full px-4 items-center space-x-3  focus-within:bg-white focus-within:border-blue-300 focus-within:border' tabIndex={1} >
                     <MagnifyingGlassIcon className='h-6 w-6' />
-                    <input type="text" value={keyword} onChange={e => setKeyword(e.target.value)} onKeyDown={e => searchQuestion(e)} placeholder='Search Question' className='bg-transparent focus:outline-none w-full text-gray-700' />
+                    <input type="text" value={keyword} onChange={e => setKeyword(e.target.value)} onKeyDown={e => searchQuestion(e)}
+                        placeholder={searchType === 'question' ? 'Search Questions' : 'Search Users'} className='bg-transparent focus:outline-none w-full text-gray-700' />
+                    <select name="" className='active:outline-none focus:outline-none bg-transparent' value={searchType} onChange={e => setSearchType(e.target.value)}>
+                        <option value="question" className='bg-transparent '>Questions</option>
+                        <option value="user" className='bg-transparent '>Users</option>
+                    </select>
                 </div>
                 <ul className='flex space-x-2'>
                     <li>Welcome, <span className='font-bold'>{currentUser?.username}</span></li>
