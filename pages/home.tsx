@@ -9,7 +9,7 @@ import { ResponseResult } from '../types/vo/response'
 
 const Home: NextPage = () => {
 
-    const { data, isLoading } = useSWR('/api/questions', fetcher<ResponseResult<QuestionVO[]>>)
+    const { data, isLoading } = useSWR('/api/questions?sort=views', fetcher<ResponseResult<QuestionVO[]>>)
 
     return (
         <div >

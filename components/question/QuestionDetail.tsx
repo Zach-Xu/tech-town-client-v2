@@ -14,6 +14,7 @@ import useSWRMutation from 'swr/mutation'
 import UserCard from '../widget/UserCard'
 import store from '../../redux/store'
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/router'
 
 type Props = {
     question: QuestionDetailVO,
@@ -32,6 +33,8 @@ const QuestionDetail = ({ question, userVoteStatus, isUserBookMarked }: Props) =
     const [isBookmarked, setIsBookmarked] = useState<boolean>(isUserBookMarked)
 
     const [displayUserCard, setDisplayUserCard] = useState<boolean>(false)
+
+    const router = useRouter()
 
 
     // request for voting a question
@@ -129,6 +132,7 @@ const QuestionDetail = ({ question, userVoteStatus, isUserBookMarked }: Props) =
                             />
                             <span className='text-blue-500 hover:text-blue-400 text-sm cursor-pointer'
                                 onMouseOver={() => setTimeout(() => { setDisplayUserCard(true) }, 500)}
+                                onClick={() => router.push(`/profile/${question.user.id}`)}
                             >{question.user.username}</span>
                         </div>
                     </div>

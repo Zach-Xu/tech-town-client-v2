@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { getTimeSince } from '../../lib/helper'
 import UserCard from '../widget/UserCard'
 import store from '../../redux/store'
+import { useRouter } from 'next/router'
 
 type Props = {
     content: string
@@ -15,6 +16,8 @@ type Props = {
 const Answer = ({ content, createdTime, username, userId, avatar }: Props) => {
 
     const [displayUserCard, setDisplayUserCard] = useState<boolean>(false)
+
+    const router = useRouter()
 
     return (
         <div >
@@ -33,7 +36,8 @@ const Answer = ({ content, createdTime, username, userId, avatar }: Props) => {
                         <Image src={avatar || '/default-user-image.png'} className='cursor-pointer' width={36} height={36} alt='user profile picture'
                             onMouseOver={() => setTimeout(() => { setDisplayUserCard(true) }, 500)} />
                         <span className='text-blue-500 hover:text-blue-400 text-sm cursor-pointer'
-                            onMouseOver={() => setTimeout(() => { setDisplayUserCard(true) }, 500)}>{username}</span>
+                            onMouseOver={() => setTimeout(() => { setDisplayUserCard(true) }, 500)}
+                            onClick={() => router.push(`/profile/${userId}`)}>{username}</span>
                     </div>
                 </div>
             </div>
