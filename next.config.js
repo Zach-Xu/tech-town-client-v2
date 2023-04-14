@@ -8,7 +8,7 @@ const nextConfig = (phase) => {
       reactStrictMode: false,
       env: {
         API_BASE_URL: 'http://localhost:8084',
-        WEBSOCKET_BASE_URL: 'ws://localhost:8084/websocket'
+        WEBSOCKET_BASE_URL: 'wss://localhost:8084/websocket'
       },
       images: {
         remotePatterns: [
