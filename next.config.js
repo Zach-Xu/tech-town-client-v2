@@ -23,6 +23,27 @@ const nextConfig = (phase) => {
 
     }
   }
+  else {
+    return {
+      reactStrictMode: false,
+      env: {
+        API_BASE_URL: 'https://tech-town-v2.azurewebsites.net',
+        WEBSOCKET_BASE_URL: 'ws://tech-town-v2.azurewebsites.net/websocket'
+      },
+
+      images: {
+        remotePatterns: [
+          {
+            protocol: 'https',
+            hostname: 'github.com',
+            port: '',
+            pathname: '/**'
+          }
+        ]
+      },
+
+    }
+  }
 
 }
 
