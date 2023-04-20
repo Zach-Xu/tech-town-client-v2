@@ -32,14 +32,13 @@ const Login = (props: Props) => {
 
     const { trigger, data, error } = useSWRMutation(params, authFetcher<ResponseResult<TokenUser>, LoginDTO>, {
         onSuccess(data, key, config) {
-            if (data.code === 401 || data.code === 400) {
-                return toast.error(data.msg)
-            }
             if (data.code == 200) {
                 localStorage.setItem(TECH_TOWN_TOKEN, data.data!.token)
                 toast.success(data.msg)
                 router.push('/home')
                 return dispatch(updateUser(data.data!.user))
+            } else {
+                return toast.error(data.msg)
             }
         },
         onError(err, key, config) {

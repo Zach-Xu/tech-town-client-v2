@@ -45,7 +45,7 @@ const Header = (props: Props) => {
     return (
         <div className='sticky top-0 h-[50px] bg-white border-b border-gray-300 py-2 flex items-center z-10'>
             <div className='w-screen flex items-center mx-auto max-w-[960px] px-3 space-x-5'>
-                <Image src='/logo.png' width={36} height={36} className='hidden md:inline-block' alt='Tech Town Logo' />
+                <Image src='/logo.png' width={36} height={36} className='hidden md:inline-block' onClick={() => router.push('/home')} alt='Tech Town Logo' />
                 <div className='flex bg-gray-100 py-2 flex-1 rounded-full px-4 items-center space-x-3  focus-within:bg-white focus-within:border-blue-300 focus-within:border' tabIndex={1} >
                     <MagnifyingGlassIcon className='h-6 w-6' />
                     <input type="text" value={keyword} onChange={e => setKeyword(e.target.value)} onKeyDown={e => searchQuestion(e)}

@@ -63,7 +63,7 @@ const Signup = (props: Props) => {
                         <p>Its quick and easy.</p>
                         <div className='border-t border-gray-400 w-full'></div>
                         <input type="text" name="username" required onChange={e => setUser({ ...user, [e.target.name]: e.target.value })} placeholder='Username' className='w-full border border-gray-400 px-2 py-3 rounded-md' />
-                        <input type="text" name="email" required onChange={e => setUser({ ...user, [e.target.name]: e.target.value })} placeholder='Email' className='w-full border border-gray-400 px-2 py-3 rounded-md' />
+                        <input type="email" name="email" required onChange={e => setUser({ ...user, [e.target.name]: e.target.value })} placeholder='Email' className='w-full border border-gray-400 px-2 py-3 rounded-md' />
                         <input type="password" name="password" required onChange={e => setUser({ ...user, [e.target.name]: e.target.value })} placeholder="Password" className='w-full border border-gray-400 px-2 py-3 rounded-md' />
                         <input type='submit' className='cursor-pointer bg-[#42b72a] px-16 py-2 text-md font-bold rounded-md text-white mx-auto' value='Sign Up'></input>
                     </form>
