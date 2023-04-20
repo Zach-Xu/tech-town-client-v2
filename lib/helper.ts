@@ -126,7 +126,7 @@ export const getActivityAction = (action: string): string => {
             return 'up-voted'
         case ACTION.QUESTION:
             return 'asked'
-        case ACTION.VOTE:
+        case ACTION.ANSWER:
             return 'answered'
         default:
             return ''
